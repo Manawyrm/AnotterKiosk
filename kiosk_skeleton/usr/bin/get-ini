@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+if ($argc != 4 && $argc != 5)
+{
+	error_log("Usage: get-ini FILE SECTION NAME [DEFAULT]");
+	error_log("Fetches a single configuration item from an ini file");
+	exit(1);
+}
+
+$config = parse_ini_file($argv[1], true, INI_SCANNER_NORMAL);
+
+if (isset($config[$argv[2]]))
+{
+	if (isset($config[$argv[2]][$argv[3]]))
+	{
+		echo $config[$argv[2]][$argv[3]];
+		exit(0);
+	}
+}
+
+echo $argv[4] ?? "";
+exit(1);

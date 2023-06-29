@@ -1,0 +1,10 @@
+[Unit]
+Description=Generate wpa_supplicant.conf from kioskbrowser.ini
+Before=wpa_supplicant.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kiosk-wifi
+
+[Install]
+WantedBy=multi-user.target

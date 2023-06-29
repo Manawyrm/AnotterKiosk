@@ -1,0 +1,15 @@
+#!/bin/bash
+
+HOSTNAME=$(get-ini /boot/kioskbrowser.ini general hostname kiosk)
+if [ -n "${HOSTNAME}" ]
+then
+	echo "${HOSTNAME}" > /tmp/hostname
+	hostnamectl --transient hostname "${HOSTNAME}"
+
+	echo "127.0.0.1	localhost" > /tmp/hosts
+	echo "::1		localhost ip6-localhost ip6-loopback" >> /tmp/hosts
+	echo "ff02::1		ip6-allnodes" >> /tmp/hosts
+	echo "ff02::2		ip6-allrouters" >> /tmp/hosts
+	echo "" >> /tmp/hosts
+	echo "127.0.1.1		${HOSTNAME}" >> /tmp/hosts
+fi

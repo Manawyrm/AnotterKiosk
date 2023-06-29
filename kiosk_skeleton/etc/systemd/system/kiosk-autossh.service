@@ -1,0 +1,10 @@
+[Unit]
+Description=Keeps an SSH tunnel open
+After=network.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/kiosk-autossh
+
+[Install]
+WantedBy=multi-user.target

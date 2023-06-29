@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  create: { }
+  push: { }
+  pull_request: { }
+
+jobs:
+  build:
+    runs-on: [self-hosted, hetzner-cax21]
+
+    outputs:
+      pkgfile: ${{ steps.pkgname.outputs.pkgfile }}
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt update -qq
+          sudo apt install -yqq libguestfs-tools qemu-utils rsync sudo wget xz pigz
+          
+      - name: Build firmware
+        run: |
+          ./build_raspberry_pi.sh
+
+      - name: Compress firmware
+        run: |
+          pigz -9 raspikiosk.img
+
+      - name: Release build artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:          
+          files: |
+            ./raspikiosk.img.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

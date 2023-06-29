@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ -f "/boot/wpa_supplicant.conf" ]; then
+	ln -s /boot/wpa_supplicant.conf /tmp/wpa_supplicant.conf
+	exit
+fi
+
+WIFI_SSID=$(get-ini /boot/kioskbrowser.ini wifi ssid)
+WIFI_PSK=$(get-ini /boot/kioskbrowser.ini wifi psk)
+WIFI_COUNTRY=$(get-ini /boot/kioskbrowser.ini wifi country)
+
+if [ -n "${WIFI_SSID}" ]
+then
+	echo "country=${WIFI_COUNTRY}" > /tmp/wpa_supplicant.conf
+	echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" >> /tmp/wpa_supplicant.conf
+	echo "update_config=1" >> /tmp/wpa_supplicant.conf
+	echo "network={" >> /tmp/wpa_supplicant.conf
+	echo "	ssid=\"${WIFI_SSID}\"" >> /tmp/wpa_supplicant.conf
+	if [ -n "${WIFI_PSK}" ]
+	then
+		echo "	psk=\"${WIFI_PSK}\"" >> /tmp/wpa_supplicant.conf
+	else
+		echo "	key_mgmt=NONE" >> /tmp/wpa_supplicant.conf
+	fi
+	echo "}" >> /tmp/wpa_supplicant.conf
+fi
+

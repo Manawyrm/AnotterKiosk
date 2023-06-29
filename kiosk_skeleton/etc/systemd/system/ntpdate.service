@@ -1,0 +1,12 @@
+[Unit]
+Description=Force ntpdate to synchronise clock
+Requires=networking.service
+After=syslog.target networking.service dhcpcd.service
+Before=lightdm.service
+
+[Service]
+Type=oneshot
+ExecStart=ntpdate ptbtime2.ptb.de ptbtime3.ptb.de
+
+[Install]
+WantedBy=multi-user.target

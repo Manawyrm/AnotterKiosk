@@ -1,0 +1,36 @@
+#!/bin/bash
+
+VNC_ENABLED=$(get-ini /boot/kioskbrowser.ini vnc enabled)
+if [ "${VNC_ENABLED}" -eq 1 ]
+then
+	x11vnc -localhost &
+fi
+
+# move the cursor out of the way
+xdotool mousemove 0 0
+
+xset s off # don't activate screensaver
+xset -dpms # disable DPMS (Energy Star) features.
+xset s noblank # don't blank the video device
+
+# hide mouse cursor after 1 second
+unclutter -idle 1 -root &
+
+# set a custom resolution (if specified)
+RESOLUTION=$(get-ini /boot/kioskbrowser.ini screen force_resolution)
+if [ -n "${RESOLUTION}" ]
+then
+	MONITOR=$(xrandr -q | grep " connected" | awk '{ print $1; }')
+	xrandr --output "${MONITOR}" --mode "${RESOLUTION}"
+fi
+
+# start chromium
+URL=$(get-ini /boot/kioskbrowser.ini browser url)
+chromium --start-fullscreen --check-for-update-interval=1 --simulate-critical-update --noerrdialogs --disable-infobars --kiosk --allow-insecure-localhost ${URL} &
+
+# if a cache clearing interval is specified, launch the cache-clear-timer (while true, sleep, rm -rf)
+CACHE_CLEAR=$(get-ini /boot/kioskbrowser.ini browser cache_clear_interval)
+if [ -n "${CACHE_CLEAR}" ]
+then
+	/usr/bin/cache-clear-timer "${CACHE_CLEAR}" &
+fi

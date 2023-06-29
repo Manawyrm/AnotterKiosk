@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+// Wait 60 seconds (after boot) before doing any watchdog actions.
+sleep(60);
+
+$config = parse_ini_file("/boot/kioskbrowser.ini", true, INI_SCANNER_NORMAL);
+
+if (isset($config["watchdog"]) && isset($config["watchdog"]["enabled"]))
+{
+	if (trim($config["watchdog"]["enabled"]) == 1)
+	{
+		while (true)
+		{
+			clearstatcache();
+			$last_heartbeat = filemtime("/dev/shm/heartbeat");
+
+			if ((time() - $last_heartbeat) > $config["watchdog"]["timeout"])
+			{
+				error_log("Exceeded timeout! Restarting lightdm.");
+				exec("systemctl restart lightdm");
+				// Cooldown delay (give the system time to reinitialize)
+				sleep(60);
+			}
+			if ((time() - $last_heartbeat) > $config["watchdog"]["timeout_reboot"])
+			{
+				error_log("Exceeded timeout_reboot! Rebooting system.");
+				exec("reboot");
+			}
+
+			sleep(5);
+		}
+	}
+}

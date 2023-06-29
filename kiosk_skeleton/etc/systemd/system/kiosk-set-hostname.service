@@ -1,0 +1,10 @@
+[Unit]
+Description=Set hostname to the one from kioskbrowser.ini
+Before=networking.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kiosk-set-hostname
+
+[Install]
+WantedBy=multi-user.target

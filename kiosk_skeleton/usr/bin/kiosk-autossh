@@ -1,0 +1,10 @@
+#!/bin/bash
+
+AUTOSSH_ENABLED=$(get-ini /boot/kioskbrowser.ini autossh enabled)
+if [ "${AUTOSSH_ENABLED}" -eq 1 ]
+then
+	AUTOSSH_ARGS=$(get-ini /boot/kioskbrowser.ini autossh args)
+	export AUTOSSH_GATETIME=0
+	/usr/bin/autossh -N -q -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" ${AUTOSSH_ARGS}
+fi
+

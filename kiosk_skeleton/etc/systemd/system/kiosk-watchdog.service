@@ -1,0 +1,10 @@
+[Unit]
+Description=HTTP based watchdog
+After=lightdm.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/kiosk-watchdog
+
+[Install]
+WantedBy=multi-user.target
