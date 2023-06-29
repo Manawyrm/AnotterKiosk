@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# *sigh*, some docker containers don't seem to have sbin in their PATH
+export PATH=$PATH:/usr/sbin
+
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 BUILD_DIR="${SCRIPT_DIR}/work/root/"
 
