@@ -1,8 +1,7 @@
+# AnotterKiosk
 
+Another kiosk browser OS? Yes, this one is a little bit opinionated :)  
 
-Another kiosk browser OS?
-
-Yes, this one is a little bit opinionated :)  
 The author ran several similar setups in production for years and has seen a lot of problems and strange failure modes.  
 This project aims to solve a lot of those (at least for the author), it might also be useful for others :)  
 
