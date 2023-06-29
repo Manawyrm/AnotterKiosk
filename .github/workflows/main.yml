@@ -5,6 +5,9 @@ on:
   push: { }
   pull_request: { }
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: [self-hosted, hetzner-cax21]
@@ -28,6 +31,10 @@ jobs:
       - name: Compress firmware
         run: |
           pigz -9 raspikiosk.img
+
+      - name: Debug info
+        run: |
+          ls -lAh .
 
       - name: Release build artifacts
         uses: softprops/action-gh-release@v1
