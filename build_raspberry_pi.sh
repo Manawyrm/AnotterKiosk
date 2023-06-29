@@ -26,10 +26,7 @@ rm -f raspios.img
 xz -kd raspios.img.xz
 
 # Repartition image
-export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
 export LIBGUESTFS_BACKEND_SETTINGS=force_tcg
-virt-filesystems --long -h --all -a raspios.img
-
 truncate -r raspios.img raspikiosk.img
 truncate -s +3G raspikiosk.img
 
@@ -44,8 +41,8 @@ sudo mount /dev/loop0p2 "${BUILD_DIR}"
 sudo mount /dev/loop0p1 "${BUILD_DIR}/boot"
 
 # Copy the (raspberry pi-specific) skeleton files
-rsync -a "${SCRIPT_DIR}/raspberry_pi_skeleton/." "${BUILD_DIR}"
-rsync -a "${SCRIPT_DIR}/kiosk_skeleton/." "${BUILD_DIR}/kiosk_skeleton"
+sudo rsync -a "${SCRIPT_DIR}/raspberry_pi_skeleton/." "${BUILD_DIR}"
+sudo rsync -a "${SCRIPT_DIR}/kiosk_skeleton/." "${BUILD_DIR}/kiosk_skeleton"
 
 # Mount system partitions (from the build host)
 sudo mount -t proc /proc "${BUILD_DIR}/proc/"
