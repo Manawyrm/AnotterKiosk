@@ -1,3 +1,5 @@
+
+
 Another kiosk browser OS?
 
 Yes, this one is a little bit opinionated :)  
@@ -29,3 +31,7 @@ Security considerations:
 - Autossh does not check SSH host keys. This is okay-ish as long as the target server only allows tunneling, nothing else.
 - nginx/PHP are allowed to use sudo/NOPASSWD (because it needs to query the VideoCore, manage service, etc.), more priviledge seperation would be nice
 - due to the skeleton mechanism, the system has some ... creative permissions. some cleanup required.
+
+Inspirations / Other Kiosk-OSes:
+- https://github.com/jareware/chilipie-kiosk/
+- https://github.com/guysoft/FullPageOS
