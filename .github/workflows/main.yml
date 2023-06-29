@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update -qq
-          sudo apt install -yqq libguestfs-tools qemu-utils qemu-system-arm qemu-user-static binfmt-support rsync sudo wget xz-utils pigz mount dosfstools libarchive-tools
+          sudo apt install -yqq libguestfs-tools qemu-utils qemu-system-arm qemu-efi-aarch64 qemu-block-extra qemu-user-static binfmt-support rsync sudo wget xz-utils pigz mount dosfstools libarchive-tools
           
       - name: Build firmware
         run: |

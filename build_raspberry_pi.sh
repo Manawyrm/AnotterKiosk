@@ -26,6 +26,8 @@ rm -f raspios.img
 xz -kd raspios.img.xz
 
 # Repartition image
+export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
+/usr/bin/qemu-system-aarch64
 virt-filesystems --long -h --all -a raspios.img
 
 truncate -r raspios.img raspikiosk.img
