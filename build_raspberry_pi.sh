@@ -45,9 +45,9 @@ sudo rsync -a "${SCRIPT_DIR}/raspberry_pi_skeleton/." "${BUILD_DIR}"
 sudo rsync -a "${SCRIPT_DIR}/kiosk_skeleton/." "${BUILD_DIR}/kiosk_skeleton"
 
 # Mount system partitions (from the build host)
-sudo mount -t proc /proc "${BUILD_DIR}/proc/"
-sudo mount --rbind /sys "${BUILD_DIR}/sys/"
-sudo mount --rbind /dev "${BUILD_DIR}/dev/"
+sudo mount proc -t proc -o nosuid,noexec,nodev "${BUILD_DIR}/proc/"
+sudo mount sys -t sysfs -o nosuid,noexec,nodev,ro "${BUILD_DIR}/sys/"
+sudo mount devpts -t devtmpfs -o mode=0755,nosuid "${BUILD_DIR}/dev/"
 
 sudo chroot "${BUILD_DIR}" /raspberry_pi_bullseye.sh
 sudo chroot "${BUILD_DIR}" /kiosk_skeleton/build.sh
