@@ -15,7 +15,8 @@ if [ ! -f raspios.img.xz ]
 then
 	wget -O raspios.img.xz "https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2023-05-03/2023-05-03-raspios-bullseye-arm64-lite.img.xz"
 	echo "bf982e56b0374712d93e185780d121e3f5c3d5e33052a95f72f9aed468d58fa7 raspios.img.xz" | sha256sum --check --status
-	if [ $? -ne 0 ];
+	if [ $? -ne 0 ]
+	then
 	    echo "downloaded raspios does not match checksum";
 	    return -1;
 	fi
