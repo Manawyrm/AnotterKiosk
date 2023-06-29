@@ -59,3 +59,11 @@ systemctl enable kiosk-set-hostname
 systemctl enable ntpdate
 systemctl enable lightdm
 systemctl enable nginx
+
+# generate a version info/build info file
+echo -n "Chromium version: " >> /version-info
+dpkg --list | grep "ii  chromium " >> /version-info
+
+echo -n "Linux kernel version: " >> /version-info
+ls /lib/modules/ >> /version-info
+echo >> /version-info

@@ -6,11 +6,13 @@ export PATH=$PATH:/usr/sbin
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 BUILD_DIR="${SCRIPT_DIR}/work/root/"
 
+# cleanup any previous build attempts
 umount -fl "${BUILD_DIR}" || true
 losetup -D /dev/loop0 || true
 rm -rf "${BUILD_DIR}" || true
 mkdir -p "${BUILD_DIR}"
 
+# download a modern RaspiOS build
 if [ ! -f raspios.img.xz ]
 then
 	wget -O raspios.img.xz "https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2023-05-03/2023-05-03-raspios-bullseye-arm64-lite.img.xz"
@@ -44,16 +46,30 @@ sudo mount /dev/loop0p1 "${BUILD_DIR}/boot"
 sudo rsync -a "${SCRIPT_DIR}/raspberry_pi_skeleton/." "${BUILD_DIR}"
 sudo rsync -a "${SCRIPT_DIR}/kiosk_skeleton/." "${BUILD_DIR}/kiosk_skeleton"
 
+# Make fstab read-only
+sed -i 's/vfat    defaults/vfat    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
+sed -i 's/ext4    defaults/ext4    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
+
+# Include git repo version info
+echo -n "AnotterKiosk repository version: " > "${BUILD_DIR}/version-info"
+git describe --abbrev=4 --dirty --always --tags >> "${BUILD_DIR}/version-info"
+echo >> "${BUILD_DIR}/version-info"
+
 # Mount system partitions (from the build host)
 sudo mount proc -t proc -o nosuid,noexec,nodev "${BUILD_DIR}/proc/"
 sudo mount sys -t sysfs -o nosuid,noexec,nodev,ro "${BUILD_DIR}/sys/"
 sudo mount devpts -t devtmpfs -o mode=0755,nosuid "${BUILD_DIR}/dev/"
 
+# Raspbian currently ships only Debian 11. Let's upgrade to 12.
 sudo chroot "${BUILD_DIR}" /raspberry_pi_bullseye.sh
+
+# and then actually install everything.
 sudo chroot "${BUILD_DIR}" /kiosk_skeleton/build.sh
 
 sudo rm -r "${BUILD_DIR}/kiosk_skeleton"
 sudo rm "${BUILD_DIR}/raspberry_pi_bullseye.sh"
+
+cp "${BUILD_DIR}/version-info" raspikiosk.version
 
 sudo umount -fl "${BUILD_DIR}/proc"
 sudo umount -fl "${BUILD_DIR}/sys"
