@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update -qq
-          sudo apt install -yqq libguestfs-tools qemu-utils rsync sudo wget xz pigz
+          sudo apt install -yqq libguestfs-tools qemu-utils rsync sudo wget xz-utils pigz
           
       - name: Build firmware
         run: |
