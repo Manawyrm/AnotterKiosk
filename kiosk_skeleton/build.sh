@@ -22,21 +22,25 @@ chown -hR www-data:www-data /var/www/html/
 
 mkdir -p /home/pi/.config/chromium/
 chown -hR 1000:1000 /home/pi/.config/chromium/
-
+mkdir -p /home/pi/.cache
+chown -hR 1000:1000 /home/pi/.cache
 mkdir -p /home/pi/.pki/
 chown -hR 1000:1000 /home/pi/.pki/
-
 mkdir -p /home/pi/.ssh
 chown -hR 1000:1000 /home/pi/.ssh
 mkdir -p /root/.ssh
 
-# FIXME: readonly in /etc/fstab
+mkdir -p /var/lib/lightdm
+mkdir -p /var/lib/dhcpcd
+mkdir -p /var/lib/nginx
+
 echo "tmpfs		/dev/shm	tmpfs	mode=0777	0	0" >> /etc/fstab
 echo "tmpfs		/tmp		tmpfs	mode=1777	0	0" >> /etc/fstab
 echo "tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0" >> /etc/fstab
 echo "tmpfs		/var/log	tmpfs		defaults,noatime,nosuid,mode=0755,size=100m    0 0" >> /etc/fstab
 echo "tmpfs		/var/lib/lightdm	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
 echo "tmpfs		/var/lib/dhcpcd	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
+echo "tmpfs		/var/lib/nginx	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
 echo "tmpfs		/home/pi/.cache tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.config/chromium/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.pki/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
