@@ -26,7 +26,22 @@ fi
 
 # start chromium
 URL=$(get-ini /boot/kioskbrowser.ini browser url)
-chromium --start-fullscreen --check-for-update-interval=1 --simulate-critical-update --noerrdialogs --disable-infobars --kiosk --allow-insecure-localhost ${URL} &
+chromium --start-fullscreen \
+		 --allow-insecure-localhost \
+		 --autoplay-policy=no-user-gesture-required \
+		 --check-for-update-interval=1 \
+		 --disable-component-update \
+		 --disable-features=Translate \
+		 --disable-infobars \
+		 --disable-pinch \
+		 --disable-session-crashed-bubble \
+		 --kiosk \
+		 --noerrdialogs \
+		 --overscroll-history-navigation=0 \
+		 --simulate-critical-update \
+		 --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
+		 --touch-events=enabled \
+		 ${URL} &
 
 # if a cache clearing interval is specified, launch the cache-clear-timer (while true, sleep, rm -rf)
 CACHE_CLEAR=$(get-ini /boot/kioskbrowser.ini browser cache_clear_interval)
