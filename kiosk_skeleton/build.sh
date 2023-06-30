@@ -3,7 +3,7 @@
 
 apt update
 APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt dist-upgrade -y
-DEBIAN_FRONTEND=noninteractive apt install -y lightdm openbox nginx php-fpm php-cli chromium autossh unclutter x11-xserver-utils xdotool htop nano openssh-server rsync x11vnc lm-sensors ntpdate scrot
+DEBIAN_FRONTEND=noninteractive apt install -y lightdm openbox nginx php-fpm php-cli chromium autossh unclutter x11-xserver-utils xdotool htop nano openssh-server rsync x11vnc lm-sensors ntpdate scrot wireless-regdb
 
 rsync -a --chown=root:root "/kiosk_skeleton/." "/"
 chown -hR pi:pi /home/pi
@@ -60,10 +60,10 @@ ln -sf /tmp/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 systemctl daemon-reload
 
 # remove unneccessary clutter
-systemctl disable dphys-swapfile
-systemctl disable ModemManager
-systemctl disable avahi-daemon
-systemctl disable bluetooth
+systemctl disable dphys-swapfile || true
+systemctl disable ModemManager || true
+systemctl disable avahi-daemon || true
+systemctl disable bluetooth || true
 
 systemctl enable kiosk-ssh-keys
 systemctl enable kiosk-wifi

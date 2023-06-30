@@ -5,7 +5,7 @@ apt update
 apt install -y polkitd locales zstd dhcpcd wpasupplicant
 locale-gen en_US.UTF-8
 
-apt install -y firmware-amd-graphics firmware-iwlwifi firmware-brcm80211 firmware-atheros firmware-misc-nonfree firmware-realtek
+apt install -y firmware-amd-graphics firmware-iwlwifi firmware-brcm80211 firmware-atheros firmware-misc-nonfree firmware-realtek firmware-ath9k-htc
 
 echo "grub-efi-amd64 grub2/force_efi_extra_removable boolean true" | debconf-set-selections
 update-grub
