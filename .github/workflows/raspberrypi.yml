@@ -28,21 +28,13 @@ jobs:
         run: |
           ./build_raspberry_pi.sh
 
-      - name: Compress firmware
-        run: |
-          pigz -9 raspikiosk.img
-
-      - name: Debug info
-        run: |
-          ls -lAh .
-
       - name: Release build artifacts
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           append_body: true
-          body_path: ./raspikiosk.version
+          body_path: ./version-info
           files: |
-            ./raspikiosk.img.gz
+            ./anotterkiosk-*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

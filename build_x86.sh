@@ -33,8 +33,8 @@ echo "${PARTLAYOUT}" | sfdisk x86kiosk.img
 ld=$(sudo losetup -P --show -f x86kiosk.img)
 
 # Create filesystems
-mkfs.ext4 "${ld}p2"
-mkfs.fat -F 32 "${ld}p1"
+sudo mkfs.ext4 "${ld}p2"
+sudo mkfs.fat -F 32 "${ld}p1"
 
 # Mount partitions
 sudo mount "${ld}p2" "${BUILD_DIR}"
@@ -56,9 +56,8 @@ echo "UUID=${fat_uuid}  /boot           vfat    ro,defaults          0       2" 
 echo "UUID=${ext_uuid}  /               ext4    ro,defaults,noatime  0       1" | sudo tee -a "${BUILD_DIR}/etc/fstab"
 
 # Include git repo version info
-echo -n "AnotterKiosk repository version: " > "${BUILD_DIR}/version-info"
+echo -n "AnotterKiosk x86 version: " > "${BUILD_DIR}/version-info"
 git describe --abbrev=4 --dirty --always --tags >> "${BUILD_DIR}/version-info"
-echo >> "${BUILD_DIR}/version-info"
 
 # Mount system partitions (from the build host)
 sudo mount proc -t proc -o nosuid,noexec,nodev "${BUILD_DIR}/proc/"
@@ -71,7 +70,7 @@ sudo chroot "${BUILD_DIR}" /kiosk_skeleton/build.sh
 
 sudo rm -r "${BUILD_DIR}/kiosk_skeleton"
 
-cp "${BUILD_DIR}/version-info" x86kiosk.version
+cp "${BUILD_DIR}/version-info" version-info
 
 sudo umount -fl "${BUILD_DIR}/proc"
 sudo umount -fl "${BUILD_DIR}/sys"
@@ -85,3 +84,7 @@ sudo umount "${BUILD_DIR}/boot"
 sudo umount "${BUILD_DIR}"
 
 sudo losetup -D "${ld}"
+
+tag=$(git describe --abbrev=4 --dirty --always --tags)
+mv x86kiosk.img anotterkiosk-${tag}-x86.img
+pigz -4 anotterkiosk-${tag}-x86.img

@@ -28,21 +28,13 @@ jobs:
         run: |
           ./build_x86.sh
 
-      - name: Compress firmware
-        run: |
-          pigz -4 x86kiosk.img
-
-      - name: Debug info
-        run: |
-          ls -lAh .
-
       - name: Release build artifacts
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           append_body: true
-          body_path: ./x86kiosk.version
+          body_path: ./version-info
           files: |
-            ./x86kiosk.img.gz
+            ./anotterkiosk-*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

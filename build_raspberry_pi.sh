@@ -51,9 +51,8 @@ sed -i 's/vfat    defaults/vfat    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
 sed -i 's/ext4    defaults/ext4    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
 
 # Include git repo version info
-echo -n "AnotterKiosk repository version: " > "${BUILD_DIR}/version-info"
+echo -n "AnotterKiosk Raspberry Pi version: " > "${BUILD_DIR}/version-info"
 git describe --abbrev=4 --dirty --always --tags >> "${BUILD_DIR}/version-info"
-echo >> "${BUILD_DIR}/version-info"
 
 # Mount system partitions (from the build host)
 sudo mount proc -t proc -o nosuid,noexec,nodev "${BUILD_DIR}/proc/"
@@ -69,7 +68,7 @@ sudo chroot "${BUILD_DIR}" /kiosk_skeleton/build.sh
 sudo rm -r "${BUILD_DIR}/kiosk_skeleton"
 sudo rm "${BUILD_DIR}/raspberry_pi_bullseye.sh"
 
-cp "${BUILD_DIR}/version-info" raspikiosk.version
+cp "${BUILD_DIR}/version-info" version-info
 
 sudo umount -fl "${BUILD_DIR}/proc"
 sudo umount -fl "${BUILD_DIR}/sys"
@@ -83,3 +82,7 @@ sudo umount "${BUILD_DIR}/boot"
 sudo umount "${BUILD_DIR}"
 
 sudo losetup -D /dev/loop0
+
+tag=$(git describe --abbrev=4 --dirty --always --tags)
+mv raspikiosk.img anotterkiosk-${tag}-arm64-raspberrypi.img
+pigz -4 anotterkiosk-${tag}-arm64-raspberrypi.img
