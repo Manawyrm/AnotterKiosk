@@ -3,8 +3,19 @@
 AUTOSSH_ENABLED=$(get-ini /boot/kioskbrowser.ini autossh enabled)
 if [ "${AUTOSSH_ENABLED}" -eq 1 ]
 then
+	if [ -f "/boot/id_rsa" ]; then
+		cp /boot/id_rsa /root/.ssh/id_rsa
+		AUTOSSH_KEYPATH="-i /root/.ssh/id_rsa"
+	fi
+	if [ -f "/boot/id_ed25519" ]; then
+		cp /boot/id_ed25519 /root/.ssh/id_ed25519
+		AUTOSSH_KEYPATH="-i /root/.ssh/id_ed25519"
+	fi
+	chown -hR root:root /root/.ssh
+	chmod -R 700 /root/.ssh
+
 	AUTOSSH_ARGS=$(get-ini /boot/kioskbrowser.ini autossh args)
 	export AUTOSSH_GATETIME=0
-	/usr/bin/autossh -N -q -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" ${AUTOSSH_ARGS}
+	/usr/bin/autossh -N -q -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" ${AUTOSSH_KEYPATH} ${AUTOSSH_ARGS}
 fi
 

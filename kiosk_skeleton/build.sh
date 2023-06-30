@@ -26,6 +26,10 @@ chown -hR 1000:1000 /home/pi/.config/chromium/
 mkdir -p /home/pi/.pki/
 chown -hR 1000:1000 /home/pi/.pki/
 
+mkdir -p /home/pi/.ssh
+chown -hR 1000:1000 /home/pi/.ssh
+mkdir -p /root/.ssh
+
 # FIXME: readonly in /etc/fstab
 echo "tmpfs		/dev/shm	tmpfs	mode=0777	0	0" >> /etc/fstab
 echo "tmpfs		/tmp		tmpfs	mode=1777	0	0" >> /etc/fstab
@@ -36,6 +40,8 @@ echo "tmpfs		/var/lib/dhcpcd	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /
 echo "tmpfs		/home/pi/.cache tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.config/chromium/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.pki/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
+echo "tmpfs		/home/pi/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
+echo "tmpfs		/root/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=0,gid=0  0       0" >> /etc/fstab
 
 # Create symlinks for configuration files which will later get created at runtime (in /tmp)
 rm /etc/hosts
@@ -53,6 +59,7 @@ systemctl disable ModemManager
 systemctl disable avahi-daemon
 systemctl disable bluetooth
 
+systemctl enable kiosk-ssh-keys
 systemctl enable kiosk-wifi
 systemctl enable kiosk-autossh
 systemctl enable kiosk-watchdog

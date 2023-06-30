@@ -1,0 +1,10 @@
+[Unit]
+Description=Handle SSH host, private and authorized keys
+Before=ssh.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kiosk-ssh-keys
+
+[Install]
+WantedBy=multi-user.target
