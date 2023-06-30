@@ -4,9 +4,14 @@ Requires=networking.service
 After=syslog.target networking.service dhcpcd.service
 Before=lightdm.service
 
+StartLimitIntervalSec=2
+StartLimitBurst=100
+
 [Service]
 Type=oneshot
 ExecStart=ntpdate ptbtime2.ptb.de ptbtime3.ptb.de
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+
+Welcome to AnotterKiosk!
+Run "mount -o remount,rw /" to make the root filesystem writeable.
+FAT32 / config partition is located in /boot.

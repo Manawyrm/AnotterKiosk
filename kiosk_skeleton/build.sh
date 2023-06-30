@@ -33,6 +33,7 @@ mkdir -p /root/.ssh
 mkdir -p /var/lib/lightdm
 mkdir -p /var/lib/dhcpcd
 mkdir -p /var/lib/nginx
+mkdir -p /var/lib/private
 
 echo "tmpfs		/dev/shm	tmpfs	mode=0777	0	0" >> /etc/fstab
 echo "tmpfs		/tmp		tmpfs	mode=1777	0	0" >> /etc/fstab
@@ -41,6 +42,7 @@ echo "tmpfs		/var/log	tmpfs		defaults,noatime,nosuid,mode=0755,size=100m    0 0"
 echo "tmpfs		/var/lib/lightdm	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
 echo "tmpfs		/var/lib/dhcpcd	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
 echo "tmpfs		/var/lib/nginx	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
+echo "tmpfs		/var/lib/private	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
 echo "tmpfs		/home/pi/.cache tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.config/chromium/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.pki/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
@@ -71,6 +73,7 @@ systemctl enable kiosk-set-hostname
 systemctl enable ntpdate
 systemctl enable lightdm
 systemctl enable nginx
+systemctl enable ssh
 
 # generate a version info/build info file
 echo -n "Chromium version: " >> /version-info

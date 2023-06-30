@@ -11,6 +11,7 @@ This project aims to solve a lot of those (at least for the author), it might al
 - [Images built via CI](https://github.com/Manawyrm/AnotterKiosk/blob/main/.github/workflows/main.yml)
 - WiFi connection support
 - Raspberry Pi (Arm64) compatibility
+- PC (x86) compatibility
 - [USB flash drive, USB SSD, etc. compatible](#how-to-use)
 - aarch64 mode for Raspberry Pis (_significant_ performance improvements over armv7/32bit ARM)
 - Read-only filesystem handling (no more broken SD cards)
@@ -23,7 +24,6 @@ This project aims to solve a lot of those (at least for the author), it might al
 - SSH tunneling support (for remote-access without port-forwarding, etc.)
 
 #### Planned features:
-- PC (x86) compatibility
 - Raspberry Pi PXE/network boot support
 - Network connectivity watchdog (configurable ping, etc. timeout)
 - Automatic reboot at specified time
@@ -40,7 +40,7 @@ You can use a tool like the [Raspberry Pi Imager](https://www.raspberrypi.com/so
 When using the latter two, make sure to extract the .gz compression first (using a tool like 7zip).  
 
 After flashing, re-plug the storage device and open the FAT32 partition.  
-Open the [`kioskbrowser.ini`](https://github.com/Manawyrm/AnotterKiosk/blob/main/raspberry_pi_skeleton/boot/kioskbrowser.ini) file in a text editor and change everything to your needs.  
+Open the [`kioskbrowser.ini`](https://github.com/Manawyrm/AnotterKiosk/blob/main/kiosk_skeleton/boot/kioskbrowser.ini) file in a text editor and change everything to your needs.  
 More complex WiFi setups (like WPA2-Enterprise) can be configured by creating a wpa_supplicant.conf.  
 Adding your own SSH keys can be done by creating a authorized_keys file.  
 If you want to use the autossh tunneling features, copy an SSH private key as either "id_rsa" or "id_ed25519".

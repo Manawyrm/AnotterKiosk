@@ -2,7 +2,7 @@
 
 echo "deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list
 apt update
-apt install -y polkitd locales zstd dhcpcd wpa_supplicant
+apt install -y polkitd locales zstd dhcpcd wpasupplicant
 locale-gen en_US.UTF-8
 
 apt install -y firmware-amd-graphics firmware-iwlwifi firmware-brcm80211 firmware-atheros firmware-misc-nonfree firmware-realtek

@@ -2,14 +2,13 @@ name: CI
 
 on:
   create: { }
-  push: { }
   pull_request: { }
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  x86:
     runs-on: [ubuntu-latest]
 
     outputs:
@@ -27,6 +26,36 @@ jobs:
       - name: Build firmware
         run: |
           ./build_x86.sh
+
+      - name: Release build artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          append_body: true
+          body_path: ./version-info
+          files: |
+            ./anotterkiosk-*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  raspberrypi:
+    runs-on: [self-hosted, hetzner-cax21]
+
+    outputs:
+      pkgfile: ${{ steps.pkgname.outputs.pkgfile }}
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt update -qq
+          sudo apt install -yqq libguestfs-tools qemu-utils qemu-system-arm qemu-efi-aarch64 qemu-block-extra qemu-user-static binfmt-support rsync sudo wget xz-utils pigz mount dosfstools libarchive-tools
+          
+      - name: Build firmware
+        run: |
+          ./build_raspberry_pi.sh
 
       - name: Release build artifacts
         uses: softprops/action-gh-release@v1
