@@ -84,5 +84,5 @@ echo -n "Chromium version: " >> /version-info
 dpkg --list | grep "ii  chromium " >> /version-info
 
 echo -n "Linux kernel version: " >> /version-info
-ls /lib/modules/ >> /version-info
+ls /lib/modules/  | sort -r | head -n 1 >> /version-info
 echo >> /version-info
