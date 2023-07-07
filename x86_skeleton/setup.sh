@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list
 apt update
+APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Options::="--force-confold" -f -y dist-upgrade
 apt install -y polkitd locales zstd dhcpcd wpasupplicant
 locale-gen en_US.UTF-8
 
