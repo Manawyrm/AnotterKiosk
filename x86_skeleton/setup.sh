@@ -6,7 +6,7 @@ APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Option
 APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt install -f -y -t bookworm-backports linux-image-amd64
 # to remove old kernel versions
 apt --purge autoremove
-apt install -y polkitd locales zstd dhcpcd wpasupplicant
+apt install -y polkitd locales zstd dhcpcd wpasupplicant xserver-xorg-video-nouveau
 locale-gen en_US.UTF-8
 
 apt install -y firmware-amd-graphics firmware-iwlwifi firmware-brcm80211 firmware-atheros firmware-misc-nonfree firmware-realtek firmware-ath9k-htc
