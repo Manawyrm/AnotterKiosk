@@ -24,6 +24,16 @@ then
 	xrandr --output "${MONITOR}" --mode "${RESOLUTION}"
 fi
 
+# set a custom modeline (if specified)
+CUSTOM_MODELINE=$(get-ini /boot/kioskbrowser.ini screen custom_modeline)
+if [ -n "${CUSTOM_MODELINE}" ]
+then
+	MONITOR=$(xrandr -q | grep " connected" | awk '{ print $1; }')
+	xrandr --newmode "custom" ${CUSTOM_MODELINE}
+	xrandr --addmode "${MONITOR}" "custom"
+	xrandr --output "${MONITOR}" --mode "custom"
+fi
+
 # start chromium
 URL=$(get-ini /boot/kioskbrowser.ini browser url)
 chromium --start-fullscreen \
