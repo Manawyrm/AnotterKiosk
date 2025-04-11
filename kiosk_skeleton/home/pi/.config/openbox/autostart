@@ -34,6 +34,14 @@ then
 	xrandr --output "${MONITOR}" --mode "custom"
 fi
 
+# set a screen rotation (if specified)
+ROTATE_SCREEN=$(get-ini /boot/kioskbrowser.ini screen rotate_screen)
+if [ -n "${ROTATE_SCREEN}" ]
+then
+	MONITOR=$(xrandr -q | grep " connected" | awk '{ print $1; }')
+	xrandr --output "${MONITOR}" --rotate ${ROTATE_SCREEN}	
+fi
+
 # start chromium
 URL=$(get-ini /boot/kioskbrowser.ini browser url)
 chromium --start-fullscreen \
