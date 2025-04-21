@@ -1,0 +1,51 @@
+#!/bin/bash
+
+INI_FILE="/boot/kioskbrowser.ini"
+REBOOT_ENABLED=$(awk -F '=' '/^\[reboot\]/ { in_reboot=1; next }
+                             in_reboot && /^\[/ { in_reboot=0 }
+                             in_reboot && $1 ~ /enabled/ { gsub(/ /, "", $2); print $2 }' "$INI_FILE")
+
+REBOOT_TIME=$(awk -F '=' '/^\[reboot\]/ { in_reboot=1; next }
+                           in_reboot && /^\[/ { in_reboot=0 }
+                           in_reboot && $1 ~ /reboot_time/ { gsub(/ /, "", $2); print $2 }' "$INI_FILE")
+
+if [[ "$REBOOT_ENABLED" -eq 1 ]] && [[ "$REBOOT_TIME" =~ ^[0-2][0-9]:[0-5][0-9]$ ]]; then
+    echo "Scheduling reboot for $REBOOT_TIME..."
+
+    TARGET_TIME=$(date -d "$REBOOT_TIME" +%s)
+    NOW=$(date +%s)
+
+    if [ "$TARGET_TIME" -le "$NOW" ]; then
+        TARGET_TIME=$(date -d "tomorrow $REBOOT_TIME" +%s)
+    fi
+
+    TARGET_ISO=$(date -d "@$TARGET_TIME" --iso-8601=seconds)
+
+    REBOOT_UNIT="/etc/systemd/system/reboot-at.timer"
+    cat <<EOF > "$REBOOT_UNIT"
+[Unit]
+Description=One-off reboot timer
+
+[Timer]
+OnCalendar=$TARGET_ISO
+Persistent=false
+
+[Install]
+WantedBy=timers.target
+EOF
+
+    # Create the associated service
+    cat <<EOF > /etc/systemd/system/reboot-at.service
+[Unit]
+Description=Scheduled Reboot
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/reboot
+EOF
+
+    systemctl daemon-reload
+    systemctl enable --now reboot-at.timer
+else
+    echo "Reboot not scheduled (disabled or invalid time)"
+fi

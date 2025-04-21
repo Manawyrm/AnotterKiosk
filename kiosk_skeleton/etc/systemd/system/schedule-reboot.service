@@ -1,0 +1,10 @@
+[Unit]
+Description=Schedule Reboot from kioskbrowser.ini
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/schedule-reboot
+
+[Install]
+WantedBy=multi-user.target
