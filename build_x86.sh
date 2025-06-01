@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x -e
+
 # *sigh*, some docker containers don't seem to have sbin in their PATH
 export PATH=$PATH:/usr/sbin
 
@@ -72,16 +74,16 @@ sudo rm -r "${BUILD_DIR}/kiosk_skeleton"
 
 cp "${BUILD_DIR}/version-info" version-info
 
-sudo umount -fl "${BUILD_DIR}/proc"
-sudo umount -fl "${BUILD_DIR}/sys"
-sudo umount -fl "${BUILD_DIR}/dev"
+sudo umount -fl "${BUILD_DIR}/proc" || true
+sudo umount -fl "${BUILD_DIR}/sys" || true
+sudo umount -fl "${BUILD_DIR}/dev" || true
 
-sudo umount "${BUILD_DIR}/proc"
-sudo umount "${BUILD_DIR}/sys"
-sudo umount "${BUILD_DIR}/dev"
+sudo umount "${BUILD_DIR}/proc" || true
+sudo umount "${BUILD_DIR}/sys" || true
+sudo umount "${BUILD_DIR}/dev" || true
 
-sudo umount "${BUILD_DIR}/boot"
-sudo umount "${BUILD_DIR}"
+sudo umount "${BUILD_DIR}/boot" || true
+sudo umount "${BUILD_DIR}" || true
 
 sudo losetup -D "${ld}"
 

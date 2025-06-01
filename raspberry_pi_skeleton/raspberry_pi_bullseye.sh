@@ -10,5 +10,5 @@ APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Option
 
 # This step is a bit risky, as the current kernel in https://github.com/raspberrypi/rpi-firmware might
 # be less tested as the currently shipping kernel in the Raspberry Pi images.
-apt install -y rpi-update
-SKIP_CHECK_PARTITION=1 SKIP_WARNING=1 rpi-update
+# apt install -y rpi-update
+# SKIP_CHECK_PARTITION=1 SKIP_WARNING=1 rpi-update

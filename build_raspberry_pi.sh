@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x -e
+
 # *sigh*, some docker containers don't seem to have sbin in their PATH
 export PATH=$PATH:/usr/sbin
 
@@ -15,7 +17,7 @@ mkdir -p "${BUILD_DIR}"
 # download a modern RaspiOS build
 if [ ! -f raspios.img.xz ]
 then
-	wget -O raspios.img.xz "https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2023-05-03/2023-05-03-raspios-bullseye-arm64-lite.img.xz"
+	wget -nv -O raspios.img.xz "https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2023-05-03/2023-05-03-raspios-bullseye-arm64-lite.img.xz"
 	echo "bf982e56b0374712d93e185780d121e3f5c3d5e33052a95f72f9aed468d58fa7 raspios.img.xz" | sha256sum --check --status
 	if [ $? -ne 0 ]
 	then
@@ -43,12 +45,12 @@ sudo mount /dev/loop0p2 "${BUILD_DIR}"
 sudo mount /dev/loop0p1 "${BUILD_DIR}/boot"
 
 # Copy the (raspberry pi-specific) skeleton files
-sudo rsync -a "${SCRIPT_DIR}/raspberry_pi_skeleton/." "${BUILD_DIR}"
-sudo rsync -a "${SCRIPT_DIR}/kiosk_skeleton/." "${BUILD_DIR}/kiosk_skeleton"
+sudo rsync -a "${SCRIPT_DIR}/raspberry_pi_skeleton/." "${BUILD_DIR}" || true
+sudo rsync -a "${SCRIPT_DIR}/kiosk_skeleton/." "${BUILD_DIR}/kiosk_skeleton" || true
 
 # Make fstab read-only
-sed -i 's/vfat    defaults/vfat    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
-sed -i 's/ext4    defaults/ext4    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
+sudo sed -i 's/vfat    defaults/vfat    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
+sudo sed -i 's/ext4    defaults/ext4    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
 
 # Include git repo version info
 echo -n "AnotterKiosk Raspberry Pi version: " > "${BUILD_DIR}/version-info"
@@ -70,16 +72,16 @@ sudo rm "${BUILD_DIR}/raspberry_pi_bullseye.sh"
 
 cp "${BUILD_DIR}/version-info" version-info
 
-sudo umount -fl "${BUILD_DIR}/proc"
-sudo umount -fl "${BUILD_DIR}/sys"
-sudo umount -fl "${BUILD_DIR}/dev"
+sudo umount -fl "${BUILD_DIR}/proc" || true
+sudo umount -fl "${BUILD_DIR}/sys" || true
+sudo umount -fl "${BUILD_DIR}/dev" || true
 
-sudo umount "${BUILD_DIR}/proc"
-sudo umount "${BUILD_DIR}/sys"
-sudo umount "${BUILD_DIR}/dev"
+sudo umount "${BUILD_DIR}/proc" || true
+sudo umount "${BUILD_DIR}/sys" || true
+sudo umount "${BUILD_DIR}/dev" || true
 
-sudo umount "${BUILD_DIR}/boot"
-sudo umount "${BUILD_DIR}"
+sudo umount "${BUILD_DIR}/boot" || true
+sudo umount "${BUILD_DIR}" || true
 
 sudo losetup -D /dev/loop0
 
