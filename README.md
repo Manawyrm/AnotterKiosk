@@ -1,6 +1,8 @@
 AnotterKiosk
 =============================
 
+<img src="https://screenshot.tbspace.de/zachejgwlkq.jpg" width="45%"> <img src="https://screenshot.tbspace.de/kuhmlynagbw.jpg" width="45%">
+<img src="https://screenshot.tbspace.de/tdouafprbqk.jpg" width="45%"> <img src="https://screenshot.tbspace.de/rmhezfgucdj.jpg" width="45%">
 ### Overview
 Another kiosk browser OS? Yes, this one is a little bit opinionated :)  
 
