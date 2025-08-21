@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   raspberrypi:
-    runs-on: [self-hosted, hetzner-cax21]
+    runs-on: [ubuntu-24.04-arm]
 
     outputs:
       pkgfile: ${{ steps.pkgname.outputs.pkgfile }}
@@ -55,7 +55,7 @@ jobs:
           
       - name: Build firmware
         run: |
-          ./build_raspberry_pi.sh
+          ./build_raspberry_pi_2.sh
 
       - name: Release build artifacts
         uses: softprops/action-gh-release@v1
