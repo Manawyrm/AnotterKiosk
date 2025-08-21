@@ -30,17 +30,15 @@ rm -f raspios.img
 xz -kd raspios.img.xz
 
 # Repartition image
-export LIBGUESTFS_BACKEND_SETTINGS=force_tcg
-export LIBGUESTFS_DEBUG=1
-export LIBGUESTFS_TRACE=1
-truncate -r raspios.img raspikiosk.img
+mv raspios.img raspikiosk.img
 truncate -s +3G raspikiosk.img
-
-virt-resize --expand /dev/sda2 raspios.img raspikiosk.img
-rm -f raspios.img
+echo ", +" | sfdisk -N2 ./raspikiosk.img
 
 # Setup loop device for Raspberry Pi image (with partition scanning)
 sudo losetup -P /dev/loop0 raspikiosk.img
+
+# Resize partition
+sudo resize2fs /dev/loop0p2
 
 # Mount partitions
 sudo mount /dev/loop0p2 "${BUILD_DIR}"
