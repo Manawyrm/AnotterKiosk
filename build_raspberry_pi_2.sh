@@ -31,6 +31,8 @@ xz -kd raspios.img.xz
 
 # Repartition image
 export LIBGUESTFS_BACKEND_SETTINGS=force_tcg
+export LIBGUESTFS_DEBUG=1
+export LIBGUESTFS_TRACE=1
 truncate -r raspios.img raspikiosk.img
 truncate -s +3G raspikiosk.img
 
