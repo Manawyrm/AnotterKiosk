@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   raspberrypi:
-    runs-on: [self-hosted, hetzner-cax21]
+    runs-on: [ubuntu-24.04-arm]
 
     outputs:
       pkgfile: ${{ steps.pkgname.outputs.pkgfile }}
@@ -51,11 +51,11 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update -qq
-          sudo apt install -yqq libguestfs-tools qemu-utils qemu-system-arm qemu-efi-aarch64 qemu-block-extra qemu-user-static binfmt-support rsync sudo wget xz-utils pigz mount dosfstools libarchive-tools zerofree util-linux
+          sudo apt install -yqq libguestfs-tools qemu-utils qemu-system-arm qemu-efi-aarch64 qemu-block-extra qemu-user-static binfmt-support rsync sudo wget xz-utils pigz mount dosfstools libarchive-tools zerofree util-linux e2fsprogs
           
       - name: Build firmware
         run: |
-          ./build_raspberry_pi.sh
+          ./build_raspberry_pi_2.sh
 
       - name: Release build artifacts
         uses: softprops/action-gh-release@v1
