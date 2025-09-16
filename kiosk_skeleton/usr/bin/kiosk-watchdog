@@ -3,7 +3,7 @@
 // Wait 60 seconds (after boot) before doing any watchdog actions.
 sleep(60);
 
-$config = parse_ini_file("/boot/kioskbrowser.ini", true, INI_SCANNER_NORMAL);
+$config = parse_ini_file("/boot/firmware/kioskbrowser.ini", true, INI_SCANNER_NORMAL);
 
 if (isset($config["watchdog"]) && isset($config["watchdog"]["enabled"]))
 {

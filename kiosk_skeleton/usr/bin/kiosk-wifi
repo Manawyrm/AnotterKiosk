@@ -5,9 +5,9 @@ if [ -f "/boot/wpa_supplicant.conf" ]; then
 	exit
 fi
 
-WIFI_SSID=$(get-ini /boot/kioskbrowser.ini wifi ssid)
-WIFI_PSK=$(get-ini /boot/kioskbrowser.ini wifi psk)
-WIFI_COUNTRY=$(get-ini /boot/kioskbrowser.ini wifi country)
+WIFI_SSID=$(get-ini /boot/firmware/kioskbrowser.ini wifi ssid)
+WIFI_PSK=$(get-ini /boot/firmware/kioskbrowser.ini wifi psk)
+WIFI_COUNTRY=$(get-ini /boot/firmware/kioskbrowser.ini wifi country)
 
 if [ -n "${WIFI_SSID}" ]
 then

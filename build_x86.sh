@@ -93,7 +93,7 @@ sudo umount "${BUILD_DIR}/dev" || true
 sudo umount "${BUILD_DIR}/boot" || true
 sudo umount "${BUILD_DIR}" || true
 
-# set all empty blocks on ext4 to 0 (for better compression)
+# set all empty blocks on ext4 to 0x00 (for better compression)
 sudo zerofree "${ld}p2"
 
 sudo losetup -D "${ld}"

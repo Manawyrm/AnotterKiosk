@@ -4,7 +4,8 @@ set -x -e
 # This script is being run on the target debian platform
 
 apt update
-APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt dist-upgrade -y
+
+APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt dist-upgrade -y --option=Dpkg::Options::=--force-confdef
 DEBIAN_FRONTEND=noninteractive apt install -y wget curl fonts-noto-color-emoji lightdm openbox nginx php-fpm php-cli chromium autossh unclutter x11-xserver-utils xdotool htop nano openssh-server rsync x11vnc lm-sensors ntpsec-ntpdate scrot wireless-regdb fontconfig
 
 rsync -a --chown=root:root "/kiosk_skeleton/." "/"

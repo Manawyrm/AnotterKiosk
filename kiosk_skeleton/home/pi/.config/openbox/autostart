@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VNC_ENABLED=$(get-ini /boot/kioskbrowser.ini vnc enabled)
+VNC_ENABLED=$(get-ini /boot/firmware/kioskbrowser.ini vnc enabled)
 if [ "${VNC_ENABLED}" -eq 1 ]
 then
 	x11vnc -localhost &
@@ -17,7 +17,7 @@ xset s noblank # don't blank the video device
 unclutter -idle 1 -root &
 
 # set a custom resolution (if specified)
-RESOLUTION=$(get-ini /boot/kioskbrowser.ini screen force_resolution)
+RESOLUTION=$(get-ini /boot/firmware/kioskbrowser.ini screen force_resolution)
 if [ -n "${RESOLUTION}" ]
 then
 	MONITOR=$(xrandr -q | grep " connected" | awk '{ print $1; }')
@@ -25,7 +25,7 @@ then
 fi
 
 # set a custom modeline (if specified)
-CUSTOM_MODELINE=$(get-ini /boot/kioskbrowser.ini screen custom_modeline)
+CUSTOM_MODELINE=$(get-ini /boot/firmware/kioskbrowser.ini screen custom_modeline)
 if [ -n "${CUSTOM_MODELINE}" ]
 then
 	MONITOR=$(xrandr -q | grep " connected" | awk '{ print $1; }')
@@ -35,7 +35,7 @@ then
 fi
 
 # set a screen rotation (if specified)
-ROTATE_SCREEN=$(get-ini /boot/kioskbrowser.ini screen rotate_screen)
+ROTATE_SCREEN=$(get-ini /boot/firmware/kioskbrowser.ini screen rotate_screen)
 if [ -n "${ROTATE_SCREEN}" ]
 then
 	MONITOR=$(xrandr -q | grep " connected" | awk '{ print $1; }')
@@ -43,7 +43,7 @@ then
 fi
 
 # start chromium
-URL=$(get-ini /boot/kioskbrowser.ini browser url)
+URL=$(get-ini /boot/firmware/kioskbrowser.ini browser url)
 chromium --start-fullscreen \
 		 --allow-insecure-localhost \
 		 --autoplay-policy=no-user-gesture-required \
@@ -62,7 +62,7 @@ chromium --start-fullscreen \
 		 ${URL} &
 
 # if a cache clearing interval is specified, launch the cache-clear-timer (while true, sleep, rm -rf)
-CACHE_CLEAR=$(get-ini /boot/kioskbrowser.ini browser cache_clear_interval)
+CACHE_CLEAR=$(get-ini /boot/firmware/kioskbrowser.ini browser cache_clear_interval)
 if [ -n "${CACHE_CLEAR}" ]
 then
 	/usr/bin/cache-clear-timer "${CACHE_CLEAR}" &

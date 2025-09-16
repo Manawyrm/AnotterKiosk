@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOSTNAME=$(get-ini /boot/kioskbrowser.ini general hostname kiosk)
+HOSTNAME=$(get-ini /boot/firmware/kioskbrowser.ini general hostname kiosk)
 if [ -n "${HOSTNAME}" ]
 then
 	echo "${HOSTNAME}" > /tmp/hostname

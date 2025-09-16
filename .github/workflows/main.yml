@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   x86:
-    runs-on: [ubuntu-latest]
+    runs-on: [ubuntu-24.04]
 
     outputs:
       pkgfile: ${{ steps.pkgname.outputs.pkgfile }}
@@ -53,9 +53,13 @@ jobs:
           sudo apt update -qq
           sudo apt install -yqq libguestfs-tools qemu-utils qemu-system-arm qemu-efi-aarch64 qemu-block-extra qemu-user-static binfmt-support rsync sudo wget xz-utils pigz mount dosfstools libarchive-tools zerofree util-linux e2fsprogs
           
-      - name: Build firmware
+      - name: Build armhf (Raspberry Pi 1/2/Zero) firmware
         run: |
-          ./build_raspberry_pi_2.sh
+          ./build_raspberry_pi.sh "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2025-05-13/2025-05-13-raspios-bookworm-armhf-lite.img.xz" "a73d68b618c3ca40190c1aa04005a4dafcf32bc861c36c0d1fc6ddc48a370b6e" "armhf-raspberrypi"
+
+      - name: Build arm64 (Raspberry Pi Zero 2/3/4/5+) firmware
+        run: |
+          ./build_raspberry_pi.sh "https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2025-05-13/2025-05-13-raspios-bookworm-arm64-lite.img.xz" "62d025b9bc7ca0e1facfec74ae56ac13978b6745c58177f081d39fbb8041ed45" "arm64-raspberrypi"
 
       - name: Release build artifacts
         uses: softprops/action-gh-release@v1
