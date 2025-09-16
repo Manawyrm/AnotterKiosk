@@ -1,11 +1,16 @@
 #!/bin/bash
+set -x -e
 
 apt update
 # make sure we have all updates installed (from the -updates and -security repos)
 APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Options::="--force-confold" -f -y dist-upgrade
-APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt install -f -y -t bookworm-backports linux-image-amd64
+
+# install backports kernel (not needed on Debian 13/trixie right now)
+#APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt install -f -y -t  trixie-backports linux-image-amd64
+
 # to remove old kernel versions
 apt --purge autoremove
+
 apt install -y polkitd locales zstd dhcpcd wpasupplicant xserver-xorg-video-nouveau
 locale-gen en_US.UTF-8
 

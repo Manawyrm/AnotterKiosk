@@ -44,7 +44,7 @@ sudo mkdir "${BUILD_DIR}/boot"
 sudo mount "${ld}p1" "${BUILD_DIR}/boot"
 
 # Debootstrap debian
-sudo debootstrap --include=linux-image-amd64,grub-efi,sudo --arch amd64 bookworm "${BUILD_DIR}" http://deb.debian.org/debian/
+sudo debootstrap --include=linux-image-amd64,grub-efi,sudo --arch amd64 trixie "${BUILD_DIR}" http://deb.debian.org/debian/
 
 # Copy the skeleton files
 sudo rsync -a "${SCRIPT_DIR}/x86_skeleton/." "${BUILD_DIR}"
@@ -74,6 +74,14 @@ sudo rm -r "${BUILD_DIR}/kiosk_skeleton"
 
 cp "${BUILD_DIR}/version-info" version-info
 
+# trim all filesystems
+sudo fstrim -a
+
+# fill unused space on /boot with 0x00 
+# (FAT32, so zerofree doesn't work, we'll do it manually)
+sudo dd if=/dev/zero of="${BUILD_DIR}/boot/zerofree" bs=1M || true
+sudo rm "${BUILD_DIR}/boot/zerofree" || true
+
 sudo umount -fl "${BUILD_DIR}/proc" || true
 sudo umount -fl "${BUILD_DIR}/sys" || true
 sudo umount -fl "${BUILD_DIR}/dev" || true
@@ -85,8 +93,11 @@ sudo umount "${BUILD_DIR}/dev" || true
 sudo umount "${BUILD_DIR}/boot" || true
 sudo umount "${BUILD_DIR}" || true
 
+# set all empty blocks on ext4 to 0 (for better compression)
+sudo zerofree "${ld}p2"
+
 sudo losetup -D "${ld}"
 
 tag=$(git describe --abbrev=4 --dirty --always --tags)
 mv x86kiosk.img anotterkiosk-${tag}-x86.img
-pigz -4 anotterkiosk-${tag}-x86.img
+xz -T0 anotterkiosk-${tag}-x86.img

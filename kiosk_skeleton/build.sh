@@ -1,16 +1,18 @@
 #!/bin/bash
+set -x -e
+
 # This script is being run on the target debian platform
 
 apt update
 APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt dist-upgrade -y
-DEBIAN_FRONTEND=noninteractive apt install -y lightdm openbox nginx php-fpm php-cli chromium autossh unclutter x11-xserver-utils xdotool htop nano openssh-server rsync x11vnc lm-sensors ntpdate scrot wireless-regdb fontconfig
+DEBIAN_FRONTEND=noninteractive apt install -y wget curl fonts-noto-color-emoji lightdm openbox nginx php-fpm php-cli chromium autossh unclutter x11-xserver-utils xdotool htop nano openssh-server rsync x11vnc lm-sensors ntpsec-ntpdate scrot wireless-regdb fontconfig
 
 rsync -a --chown=root:root "/kiosk_skeleton/." "/"
 
 # Add emoji support
-mkdir -p /home/pi/.fonts
-wget --directory-prefix /home/pi/.fonts https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf
-chown -hR pi:pi /home/pi
+#mkdir -p /home/pi/.fonts
+#wget --directory-prefix /home/pi/.fonts https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf
+#chown -hR pi:pi /home/pi
 
 # Raspberry Pi specific modifications
 # raspberrypi-net-mods does things like copying /boot/wpa_supplicant.conf to the root FS

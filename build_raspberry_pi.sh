@@ -72,6 +72,14 @@ sudo rm "${BUILD_DIR}/raspberry_pi_bullseye.sh"
 
 cp "${BUILD_DIR}/version-info" version-info
 
+# trim all filesystems
+sudo fstrim -a
+
+# fill unused space on /boot with 0x00 
+# (FAT32, so zerofree doesn't work, we'll do it manually)
+sudo dd if=/dev/zero of="${BUILD_DIR}/boot/zerofree" bs=1M || true
+sudo rm "${BUILD_DIR}/boot/zerofree" || true
+
 sudo umount -fl "${BUILD_DIR}/proc" || true
 sudo umount -fl "${BUILD_DIR}/sys" || true
 sudo umount -fl "${BUILD_DIR}/dev" || true
@@ -83,8 +91,11 @@ sudo umount "${BUILD_DIR}/dev" || true
 sudo umount "${BUILD_DIR}/boot" || true
 sudo umount "${BUILD_DIR}" || true
 
+# set all empty blocks on ext4 to 0 (for better compression)
+sudo zerofree "/dev/loop0p2"
+
 sudo losetup -D /dev/loop0
 
 tag=$(git describe --abbrev=4 --dirty --always --tags)
 mv raspikiosk.img anotterkiosk-${tag}-arm64-raspberrypi.img
-pigz -4 anotterkiosk-${tag}-arm64-raspberrypi.img
+xz -T0 anotterkiosk-${tag}-arm64-raspberrypi.img
