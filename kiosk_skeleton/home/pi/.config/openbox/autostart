@@ -49,6 +49,17 @@ then
 	xrandr --output "${MONITOR}" --rotate ${ROTATE_SCREEN}	
 fi
 
+# enable/disable dark mode
+DARK_MODE=$(get-ini /boot/firmware/kioskbrowser.ini browser darkmode)
+if [ "${DARK_MODE}" -eq 1 ]
+then
+    export GTK_THEME=Adwaita-dark
+    CHROME_DARK_MODE_FLAGS="--enable-features=WebContentsForceDark:inversion_method/cielab_based/image_behavior/none"
+else
+	export GTK_THEME=Adwaita
+	CHROME_DARK_MODE_FLAGS=""
+fi
+
 # start chromium
 URL=$(get-ini /boot/firmware/kioskbrowser.ini browser url)
 chromium --start-fullscreen \
@@ -66,6 +77,7 @@ chromium --start-fullscreen \
 		 --simulate-critical-update \
 		 --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
 		 --touch-events=enabled \
+		 ${CHROME_DARK_MODE_FLAGS} \
 		 ${URL} &
 
 # if a cache clearing interval is specified, launch the cache-clear-timer (while true, sleep, rm -rf)
