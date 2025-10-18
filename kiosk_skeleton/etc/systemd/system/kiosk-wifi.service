@@ -1,6 +1,6 @@
 [Unit]
 Description=Generate wpa_supplicant.conf from kioskbrowser.ini
-Before=wpa_supplicant.service
+Before=wpa_supplicant.service ifup@wlan0.service
 
 [Service]
 Type=oneshot

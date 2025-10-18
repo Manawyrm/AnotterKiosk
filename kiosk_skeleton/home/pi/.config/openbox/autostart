@@ -16,6 +16,13 @@ xset s noblank # don't blank the video device
 # hide mouse cursor after 1 second
 unclutter -idle 1 -root &
 
+# set a custom audio output device (if specified)
+AUDIO_DEVICE=$(get-ini /boot/firmware/kioskbrowser.ini audio device)
+if [ -n "${AUDIO_DEVICE}" ]
+then
+	echo "pcm.!default \"${AUDIO_DEVICE}\"" > /tmp/asoundrc
+fi
+
 # set a custom resolution (if specified)
 RESOLUTION=$(get-ini /boot/firmware/kioskbrowser.ini screen force_resolution)
 if [ -n "${RESOLUTION}" ]

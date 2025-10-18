@@ -1,4 +1,11 @@
 
 Welcome to AnotterKiosk!
+
+This system is read-only, so you cannot modify the filesystem in any way.
+
 Run "mount -o remount,rw /" to make the root filesystem writeable.
-FAT32 / config partition is located in /boot.
+Run "mount -o remount,rw /boot/firmware" to make the config filesystem writeable.
+
+The config file is located at /boot/firmware/kioskbrowser.ini
+System logs can be viewed using "journalctl -ef" and "dmesg"
+

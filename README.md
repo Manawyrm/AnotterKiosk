@@ -68,7 +68,7 @@ Other similar projects:
 - due to the skeleton mechanism, the system has some ... creative permissions. some cleanup required.
 - AnotterKiosk is not built in a reproducible/repeatible way. This is basically unfixable due to the nature of the build process.
 
-## How-To Use
+## How-To / Installation guide
 
 > [!IMPORTANT]  
 > AnotterKiosk does not have an installer for x86 PCs. On PCs, you'll need to write the image to the storage somehow.
