@@ -31,6 +31,7 @@ Other similar projects:
 - Browser cache can be cleared at configurable intervals
 - [HTTP watchdog (website needs to send heartbeat messages via XHR/AJAX to localhost)](#http-watchdog-functionality)
 - Force specific resolution (1080p on 4k screens, broken EDID, etc.)
+- Configurable audio output (HDMI, 3.5mm, USB audio, etc.)
 - Hard NTP handling (will wait for NTP at boot)
 - SSH support
 - VNC support
