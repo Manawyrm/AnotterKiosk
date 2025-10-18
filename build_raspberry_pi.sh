@@ -84,8 +84,8 @@ sudo fstrim -a
 
 # fill unused space on /boot with 0x00 
 # (FAT32, so zerofree doesn't work, we'll do it manually)
-sudo dd if=/dev/zero of="${BUILD_DIR}/boot/zerofree" bs=1M || true
-sudo rm "${BUILD_DIR}/boot/zerofree" || true
+sudo dd if=/dev/zero of="${BUILD_DIR}/boot/firmware/zerofree" bs=1M || true
+sudo rm "${BUILD_DIR}/boot/firmware/zerofree" || true
 
 sudo umount -fl "${BUILD_DIR}/proc" || true
 sudo umount -fl "${BUILD_DIR}/sys" || true

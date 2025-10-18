@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ -f "/boot/wpa_supplicant.conf" ]; then
-	ln -s /boot/wpa_supplicant.conf /tmp/wpa_supplicant.conf
+if [ -f "/boot/firmware/wpa_supplicant.conf" ]; then
+	ln -s /boot/firmware/wpa_supplicant.conf /tmp/wpa_supplicant.conf
 	exit
 fi
 
@@ -25,3 +25,5 @@ then
 	echo "}" >> /tmp/wpa_supplicant.conf
 fi
 
+rfkill unblock all || true
+iw wlan0 set power_save off || true

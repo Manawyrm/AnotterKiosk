@@ -40,8 +40,8 @@ sudo mkfs.fat -F 32 "${ld}p1"
 
 # Mount partitions
 sudo mount "${ld}p2" "${BUILD_DIR}"
-sudo mkdir "${BUILD_DIR}/boot"
-sudo mount "${ld}p1" "${BUILD_DIR}/boot"
+sudo mkdir -p "${BUILD_DIR}/boot/firmware"
+sudo mount "${ld}p1" "${BUILD_DIR}/boot/firmware"
 
 # Debootstrap debian
 sudo debootstrap --include=linux-image-amd64,grub-efi,sudo --arch amd64 trixie "${BUILD_DIR}" http://deb.debian.org/debian/
@@ -54,7 +54,7 @@ sudo rsync -a "${SCRIPT_DIR}/kiosk_skeleton/." "${BUILD_DIR}/kiosk_skeleton"
 fat_uuid=$(lsblk -no UUID "${ld}p1")
 ext_uuid=$(lsblk -no UUID "${ld}p2")
 
-echo "UUID=${fat_uuid}  /boot           vfat    ro,defaults          0       2" | sudo tee "${BUILD_DIR}/etc/fstab"
+echo "UUID=${fat_uuid}  /boot/firmware  vfat    ro,defaults          0       2" | sudo tee "${BUILD_DIR}/etc/fstab"
 echo "UUID=${ext_uuid}  /               ext4    ro,defaults,noatime  0       1" | sudo tee -a "${BUILD_DIR}/etc/fstab"
 
 # Include git repo version info
@@ -79,8 +79,8 @@ sudo fstrim -a
 
 # fill unused space on /boot with 0x00 
 # (FAT32, so zerofree doesn't work, we'll do it manually)
-sudo dd if=/dev/zero of="${BUILD_DIR}/boot/zerofree" bs=1M || true
-sudo rm "${BUILD_DIR}/boot/zerofree" || true
+sudo dd if=/dev/zero of="${BUILD_DIR}/boot/firmware/zerofree" bs=1M || true
+sudo rm "${BUILD_DIR}/boot/firmware/zerofree" || true
 
 sudo umount -fl "${BUILD_DIR}/proc" || true
 sudo umount -fl "${BUILD_DIR}/sys" || true
@@ -90,7 +90,7 @@ sudo umount "${BUILD_DIR}/proc" || true
 sudo umount "${BUILD_DIR}/sys" || true
 sudo umount "${BUILD_DIR}/dev" || true
 
-sudo umount "${BUILD_DIR}/boot" || true
+sudo umount "${BUILD_DIR}/boot/firmware" || true
 sudo umount "${BUILD_DIR}" || true
 
 # set all empty blocks on ext4 to 0x00 (for better compression)

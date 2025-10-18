@@ -1,32 +1,32 @@
 #!/bin/bash
 
 # Generate host keys
-if [ ! -f "/boot/ssh_host_rsa_key" ]; then
+if [ ! -f "/boot/firmware/ssh_host_rsa_key" ]; then
 	echo Generating new SSH host keys, please stand by...
-	echo Remounting /boot FAT32 partition as writable. Do not power off!
-	mount -o remount,rw /boot
+	echo Remounting /boot/firmware FAT32 partition as writable. Do not power off!
+	mount -o remount,rw /boot/firmware
 
-	ssh-keygen -q -N "" -t rsa -b 2048 -f /boot/ssh_host_rsa_key
-	ssh-keygen -q -N "" -t ed25519 -f /boot/ssh_host_ed25519_key
+	ssh-keygen -q -N "" -t rsa -b 2048 -f /boot/firmware/ssh_host_rsa_key
+	ssh-keygen -q -N "" -t ed25519 -f /boot/firmware/ssh_host_ed25519_key
 
-	mount -o remount,ro /boot
+	mount -o remount,ro /boot/firmware
 	sleep 5
-	mount -o remount,ro /boot
+	mount -o remount,ro /boot/firmware
 	sync
-	echo Remounted /boot FAT32 partition as read-only.
+	echo Remounted /boot/firmware FAT32 partition as read-only.
 fi
 
 # Copy host keys into temp dir
-cp /boot/ssh_host_ed25519_key /root/.ssh/ssh_host_ed25519_key
-cp /boot/ssh_host_ed25519_key.pub /root/.ssh/ssh_host_ed25519_key.pub
-cp /boot/ssh_host_rsa_key /root/.ssh/ssh_host_rsa_key
-cp /boot/ssh_host_rsa_key.pub /root/.ssh/ssh_host_rsa_key.pub
+cp /boot/firmware/ssh_host_ed25519_key /root/.ssh/ssh_host_ed25519_key
+cp /boot/firmware/ssh_host_ed25519_key.pub /root/.ssh/ssh_host_ed25519_key.pub
+cp /boot/firmware/ssh_host_rsa_key /root/.ssh/ssh_host_rsa_key
+cp /boot/firmware/ssh_host_rsa_key.pub /root/.ssh/ssh_host_rsa_key.pub
 
 # Copy authorized_keys file into /root and /home/pi .ssh directories
-if [ -f "/boot/authorized_keys" ]; then
-	cp /boot/authorized_keys /root/.ssh/authorized_keys
+if [ -f "/boot/firmware/authorized_keys" ]; then
+	cp /boot/firmware/authorized_keys /root/.ssh/authorized_keys
 
-	cp /boot/authorized_keys /home/pi/.ssh/authorized_keys
+	cp /boot/firmware/authorized_keys /home/pi/.ssh/authorized_keys
 	chown -hR pi:pi /home/pi/.ssh
 	chmod -R 700 /home/pi/.ssh
 fi

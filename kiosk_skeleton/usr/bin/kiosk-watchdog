@@ -16,7 +16,8 @@ if (isset($config["watchdog"]) && isset($config["watchdog"]["enabled"]))
 
 			if ((time() - $last_heartbeat) > $config["watchdog"]["timeout"])
 			{
-				error_log("Exceeded timeout! Restarting lightdm.");
+				error_log("Exceeded timeout! Restarting network & lightdm.");
+				exec("systemctl restart networking");
 				exec("systemctl restart lightdm");
 				// Cooldown delay (give the system time to reinitialize)
 				sleep(60);

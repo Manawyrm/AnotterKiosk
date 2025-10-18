@@ -3,12 +3,12 @@
 AUTOSSH_ENABLED=$(get-ini /boot/firmware/kioskbrowser.ini autossh enabled)
 if [ "${AUTOSSH_ENABLED}" -eq 1 ]
 then
-	if [ -f "/boot/id_rsa" ]; then
-		cp /boot/id_rsa /root/.ssh/id_rsa
+	if [ -f "/boot/firmware/id_rsa" ]; then
+		cp /boot/firmware/id_rsa /root/.ssh/id_rsa
 		AUTOSSH_KEYPATH="-i /root/.ssh/id_rsa"
 	fi
-	if [ -f "/boot/id_ed25519" ]; then
-		cp /boot/id_ed25519 /root/.ssh/id_ed25519
+	if [ -f "/boot/firmware/id_ed25519" ]; then
+		cp /boot/firmware/id_ed25519 /root/.ssh/id_ed25519
 		AUTOSSH_KEYPATH="-i /root/.ssh/id_ed25519"
 	fi
 	chown -hR root:root /root/.ssh
