@@ -1,0 +1,10 @@
+[Unit]
+Description=Set timezone and keyboard layout to the one from kioskbrowser.ini
+Before=lightdm.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kiosk-locale
+
+[Install]
+WantedBy=multi-user.target

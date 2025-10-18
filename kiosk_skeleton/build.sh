@@ -2,7 +2,6 @@
 set -x -e
 
 # This script is being run on the target debian platform
-
 apt update
 
 APT_LISTCHANGES_FRONTEND=none DEBIAN_FRONTEND=noninteractive apt dist-upgrade -y --option=Dpkg::Options::=--force-confdef
@@ -62,13 +61,16 @@ echo "tmpfs		/home/pi/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=1000,gid=1000  0   
 echo "tmpfs		/root/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=0,gid=0  0       0" >> /etc/fstab
 
 # Create symlinks for configuration files which will later get created at runtime (in /tmp)
-rm /etc/hosts
-rm /etc/hostname
+rm /etc/hosts || true
+rm /etc/hostname || true
+rm /etc/localtime || true
 mkdir -p /etc/wpa_supplicant/
 ln -sf /tmp/hosts /etc/hosts
 ln -sf /tmp/hostname /etc/hostname
 ln -sf /tmp/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 ln -sf /tmp/asoundrc /home/pi/.asoundrc
+ln -sf /tmp/localtime /etc/localtime
+ln -sf /tmp/keyboard /etc/default/keyboard
 
 systemctl daemon-reload
 
@@ -101,6 +103,7 @@ systemctl enable kiosk-wifi
 systemctl enable kiosk-autossh
 systemctl enable kiosk-watchdog
 systemctl enable kiosk-set-hostname
+systemctl enable kiosk-locale
 systemctl enable ntpdate
 systemctl enable lightdm
 systemctl enable nginx
@@ -112,6 +115,7 @@ echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 2001:4860:4860::8888" >> /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 echo "nameserver 2001:4860:4860::8844" >> /etc/resolv.conf
+chattr +i /etc/resolv.conf
 
 # generate a version info/build info file
 echo -n "Chromium version: " >> /version-info

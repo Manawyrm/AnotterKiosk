@@ -1,0 +1,13 @@
+#!/bin/bash
+TIMEZONE=$(get-ini /boot/firmware/kioskbrowser.ini general timezone UTC)
+ln -fs "/usr/share/zoneinfo/${TIMEZONE}" /tmp/localtime
+
+LAYOUT=$(get-ini /boot/firmware/kioskbrowser.ini general keyboard_layout us)
+echo "XKBMODEL=\"pc105\"" > /tmp/keyboard
+echo "XKBLAYOUT=\"${LAYOUT}\"" >> /tmp/keyboard
+echo "XKBVARIANT=\"\"" >> /tmp/keyboard
+echo "XKBOPTIONS=\"\"" >> /tmp/keyboard
+echo "BACKSPACE=\"guess\"" >> /tmp/keyboard
+
+setupcon -k -f --force -v
+udevadm trigger --subsystem-match=input --action=change
