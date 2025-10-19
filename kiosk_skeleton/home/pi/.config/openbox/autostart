@@ -69,6 +69,24 @@ else
     CHROME_GPU_FLAGS="--disable-gpu"
 fi
 
+# enable/disable low_end_device_mode
+LOW_END=$(get-ini /boot/firmware/kioskbrowser.ini browser low_end_device_mode)
+if [ "${LOW_END}" -eq 1 ]
+then
+    CHROME_LOW_END_FLAGS="--enable-low-end-device-mode --disable-composited-antialiasing --disable-low-res-tiling"
+else
+    CHROME_LOW_END_FLAGS="--disable-low-end-device-mode"
+fi
+
+# enable/disable "disk" caching (ram disk in our case)
+DISABLE_CACHE=$(get-ini /boot/firmware/kioskbrowser.ini browser disable_cache)
+if [ "${DISABLE_CACHE}" -eq 1 ]
+then
+    CHROME_CACHE_FLAGS="--disk-cache-dir=/dev/null"
+else
+    CHROME_CACHE_FLAGS=""
+fi
+
 # start chromium
 URL=$(get-ini /boot/firmware/kioskbrowser.ini browser url)
 chromium --start-fullscreen \
@@ -77,17 +95,23 @@ chromium --start-fullscreen \
 		 --check-for-update-interval=1 \
 		 --disable-component-update \
 		 --disable-features=Translate \
+		 --disable-features=TranslateUI \
 		 --disable-infobars \
 		 --disable-pinch \
 		 --disable-session-crashed-bubble \
+		 --disable-smooth-scrolling \
 		 --kiosk \
 		 --noerrdialogs \
 		 --overscroll-history-navigation=0 \
 		 --simulate-critical-update \
 		 --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
 		 --touch-events=enabled \
+		 --process-per-site \
+		 --no-memcheck \
 		 ${CHROME_DARK_MODE_FLAGS} \
 		 ${CHROME_GPU_FLAGS} \
+		 ${CHROME_LOW_END_FLAGS} \
+		 ${CHROME_CACHE_FLAGS} \
 		 ${URL} &
 
 # if a cache clearing interval is specified, launch the cache-clear-timer (while true, sleep, rm -rf)
