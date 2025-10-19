@@ -28,7 +28,10 @@ hdmi_force_hotplug=1
 enable_uart=1
 disable_splash=1
 dtparam=audio=on
-gpu_mem=128
+gpu_mem=16
+gpu_mem_256=32
+gpu_mem_512=32
+gpu_mem_1024=128
 
 # Enable DRM VC4 V3D driver
 
