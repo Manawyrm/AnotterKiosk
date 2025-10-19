@@ -25,9 +25,9 @@ Other similar projects:
 - [Images built via CI](https://github.com/Manawyrm/AnotterKiosk/blob/main/.github/workflows/main.yml)
 - WiFi & Ethernet connection support
 - Raspberry Pi & PC (64-bit) compatibility
-- [USB flash drive, USB SSD, etc. compatible](#how-to-use)
+- [USB flash drive, USB SSD, etc. compatible](#how-to--installation-guide)
 - aarch64 images for Raspberry Pis (_significant_ performance improvements over armv7/32bit ARM)
-- 100% read-only filesystem (no more broken SD cards)
+- Read-only filesystem (no more broken SD cards)
 - Browser cache can be cleared at configurable intervals
 - [HTTP watchdog (website needs to send heartbeat messages via XHR/AJAX to localhost)](#http-watchdog-functionality)
 - Force specific resolution (1080p on 4k screens, broken EDID, etc.)
@@ -36,6 +36,9 @@ Other similar projects:
 - SSH support
 - VNC support
 - SSH tunneling support (for remote-access without port-forwarding, on DS-Lite/cellular connections, etc.)
+- Support for multi-touch touch-screens and gestures
+- Dark mode support
+- Configurable timezone and keyboard layout
 
 ## Supported platforms
 - Raspberry Pi 3, 4, 5, Zero 2 (W)
@@ -51,6 +54,9 @@ Other similar projects:
 - Public transport timetable
 - Digital picture frame/slideshow
 - Victron Solar dashboard
+- Interactive maps
+- Digital concierge
+- Magic mirrors
 
 > [!TIP]
 > Combining AnotterKiosk with an existing web CMS (like Typo3) is an excellent way to build a very flexible digital signage solution:  
