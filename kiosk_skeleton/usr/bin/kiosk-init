@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# kiosk-init replaces the regular /sbin/init process temporarily.
+# It mounts the config partition, looks for the splash.png logo,
+# loads the graphics drivers (DRM/VC4) on Pi's, displays the logo
+# and then just resumes the boot process using systemd as usual.
+
+mount -t sysfs none /sys
+mount -t proc proc /proc
+mount /dev
+mkdir -p /dev/shm
+mkdir -p /dev/pts
+mount /dev/shm
+mount devpts /dev/pts -t devpts
+mount -o ro /boot/firmware
+mount -a
+
+if [ ! -f /boot/firmware/splash.png ]; then
+        exec /sbin/init
+fi
+
+# Try to load Raspberry Pi GPU/DRM drivers now, otherwise the driver load will wipe the splash later.
+/sbin/modprobe -abq drm_dma_helper drm_display_helper drm_kms_helper vc4 drm
+
+# Disable the VT consoles
+echo 0 > /sys/class/vtconsole/vtcon0/bind
+echo 0 > /sys/class/vtconsole/vtcon1/bind
+
+echo | /usr/bin/fbi -d /dev/fb0 --noverbose --nointeractive -T 1 -1 -t 0 -a /boot/firmware/splash.png &> /dev/null
+
+# Continue regular boot (aka systemd init)
+exec /sbin/init

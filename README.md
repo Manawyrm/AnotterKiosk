@@ -36,6 +36,7 @@ Other similar projects:
 - SSH support
 - VNC support
 - SSH tunneling support (for remote-access without port-forwarding, on DS-Lite/cellular connections, etc.)
+- Graphical splash screen while booting
 - Support for multi-touch touch-screens and gestures
 - Dark mode support
 - Configurable timezone and keyboard layout
@@ -95,7 +96,8 @@ After flashing, re-plug the storage device and open the FAT32 partition.
 Open the [`kioskbrowser.ini`](https://github.com/Manawyrm/AnotterKiosk/blob/main/kiosk_skeleton/boot/firmware/kioskbrowser.ini) file in a text editor and change everything to your needs.  
 More complex WiFi setups (like WPA2-Enterprise) can be configured by creating a wpa_supplicant.conf.  
 Adding your own SSH keys can be done by creating a authorized_keys file.  
-If you want to use the autossh tunneling features, copy an SSH private key as either "id_rsa" or "id_ed25519".
+If you want to use the autossh tunneling features, copy an SSH private key as either "id_rsa" or "id_ed25519".  
+The splash screen can be customized by replacing (or entirely removing) `splash.png`.
 
 ## HTTP watchdog functionality
 Browsers are complex, networks are unstable and software can be buggy.   
