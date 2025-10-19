@@ -60,6 +60,15 @@ else
 	CHROME_DARK_MODE_FLAGS=""
 fi
 
+# enable/disable hardware acceleration
+HW_ACCEL=$(get-ini /boot/firmware/kioskbrowser.ini browser hardware_accel)
+if [ "${HW_ACCEL}" -eq 1 ]
+then
+    CHROME_GPU_FLAGS=""
+else
+    CHROME_GPU_FLAGS="--disable-gpu"
+fi
+
 # start chromium
 URL=$(get-ini /boot/firmware/kioskbrowser.ini browser url)
 chromium --start-fullscreen \
@@ -78,6 +87,7 @@ chromium --start-fullscreen \
 		 --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
 		 --touch-events=enabled \
 		 ${CHROME_DARK_MODE_FLAGS} \
+		 ${CHROME_GPU_FLAGS} \
 		 ${URL} &
 
 # if a cache clearing interval is specified, launch the cache-clear-timer (while true, sleep, rm -rf)
