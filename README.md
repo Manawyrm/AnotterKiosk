@@ -42,11 +42,11 @@ Other similar projects:
 - [Local webserver with PHP support](#local-webserver) (can host simple HTML, landing pages, slideshows, iFrame mechanisms, etc.)
 
 ## Supported platforms
-- Raspberry Pi 3, 4, 5, Zero 2 (W)
-- PCs with UEFI (Intel, AMD or Nvidia GPUs)
+- Raspberry Pi 3, 4, 5, Zero 2 (W): use `arm64-raspberrypi.img.xz`
+- PCs with UEFI (Intel, AMD or Nvidia GPUs): use `x86.img.xz`
 
 **not recommended, but working**
-- Raspberry Pi 1, 2, Zero (W) (very slow, 32bit only, try to avoid, use armhf images)
+- Raspberry Pi 1, 2, Zero (W) (very slow, 32bit only, try to avoid): use `armhf-raspberrypi.img.xz`
 
 ## Application examples
 - Digital signage
@@ -81,6 +81,9 @@ Other similar projects:
 > [!IMPORTANT]  
 > AnotterKiosk does not have an installer for x86 PCs. On PCs, you'll need to write the image to the storage somehow.
 > Either write the storage media (like NVMe or SATA storage) externally using another PC or boot a Linux Live-ISO and use dd to flash the image.
+
+> [!WARNING]  
+> Don't use the `armhf` images on Raspberry Pi 3 or newer (or the Zero 2 (W)). It will work, but performance will be impacted severely.
 
 Just like any other Raspberry Pi image:   
 Download the current .img.xz file from the [Releases](https://github.com/Manawyrm/AnotterKiosk/releases) page and flash it to a storage device of your choice.  
