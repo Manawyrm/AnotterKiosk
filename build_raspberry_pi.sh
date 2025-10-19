@@ -47,6 +47,17 @@ sudo losetup -P /dev/loop0 raspikiosk.img
 # Resize partition
 sudo resize2fs /dev/loop0p2
 
+# Manually set PARTUUID to 0x23421312
+sudo fdisk /dev/loop0 <<EOF > /dev/null
+p
+x
+i
+0x23421312
+r
+p
+w
+EOF
+
 # Mount partitions
 sudo mount /dev/loop0p2 "${BUILD_DIR}"
 sudo mount /dev/loop0p1 "${BUILD_DIR}/boot/firmware"
@@ -58,10 +69,6 @@ sudo rsync -a "${SCRIPT_DIR}/kiosk_skeleton/." "${BUILD_DIR}/kiosk_skeleton" || 
 # Use correct architecture specific (arm64/armhf) config.txt
 sudo rm "${BUILD_DIR}/boot/firmware/config.txt"
 sudo mv "${BUILD_DIR}/boot/firmware/config-${IMAGE_SUFFIX}.txt" "${BUILD_DIR}/boot/firmware/config.txt"
-
-# Make fstab read-only
-sudo sed -i 's/vfat    defaults/vfat    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
-sudo sed -i 's/ext4    defaults/ext4    ro,defaults/g' "${BUILD_DIR}/etc/fstab"
 
 # Include git repo version info
 echo -n "AnotterKiosk Raspberry Pi version: " > "${BUILD_DIR}/version-info"

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# configure DNS
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 2001:4860:4860::8888" >> /etc/resolv.conf
+echo "nameserver 8.8.4.4" >> /etc/resolv.conf
+echo "nameserver 2001:4860:4860::8844" >> /etc/resolv.conf
+
 if [ -f "/boot/firmware/wpa_supplicant.conf" ]; then
 	ln -s /boot/firmware/wpa_supplicant.conf /tmp/wpa_supplicant.conf
 	exit

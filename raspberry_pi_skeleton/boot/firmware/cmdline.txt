@@ -1,1 +1,1 @@
-console=serial0,115200 console=tty1 root=PARTUUID=7351b90c-02 rootfstype=ext4 ro rootwait logo.nologo consoleblank=0 loglevel=0 quiet
+console=serial0,115200 console=tty1 root=PARTUUID=23421312-02 rootfstype=ext4 ro rootwait logo.nologo consoleblank=0 loglevel=0 quiet

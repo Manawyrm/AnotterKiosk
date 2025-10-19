@@ -42,7 +42,7 @@ chown -hR 1000:1000 /home/pi/.ssh
 mkdir -p /root/.ssh
 
 mkdir -p /var/lib/lightdm
-mkdir -p /var/lib/dhcpcd
+mkdir -p /var/lib/dhcp
 mkdir -p /var/lib/nginx
 mkdir -p /var/lib/private
 
@@ -51,9 +51,12 @@ echo "tmpfs		/tmp		tmpfs	mode=1777	0	0" >> /etc/fstab
 echo "tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0" >> /etc/fstab
 echo "tmpfs		/var/log	tmpfs		defaults,noatime,nosuid,mode=0755,size=100m    0 0" >> /etc/fstab
 echo "tmpfs		/var/lib/lightdm	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
-echo "tmpfs		/var/lib/dhcpcd	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
+echo "tmpfs		/var/lib/dhcp	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
 echo "tmpfs		/var/lib/nginx	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
 echo "tmpfs		/var/lib/private	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
+echo "tmpfs		/var/cache/lightdm	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
+
+
 echo "tmpfs		/home/pi/.cache tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.config/chromium/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.pki/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
@@ -64,6 +67,7 @@ echo "tmpfs		/root/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=0,gid=0  0       0" >>
 rm /etc/hosts || true
 rm /etc/hostname || true
 rm /etc/localtime || true
+rm /etc/resolv.conf || true
 mkdir -p /etc/wpa_supplicant/
 ln -sf /tmp/hosts /etc/hosts
 ln -sf /tmp/hostname /etc/hostname
@@ -71,6 +75,7 @@ ln -sf /tmp/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 ln -sf /tmp/asoundrc /home/pi/.asoundrc
 ln -sf /tmp/localtime /etc/localtime
 ln -sf /tmp/keyboard /etc/default/keyboard
+ln -sf /tmp/resolv.conf /etc/resolv.conf
 
 systemctl daemon-reload
 
@@ -108,14 +113,6 @@ systemctl enable ntpdate
 systemctl enable lightdm
 systemctl enable nginx
 systemctl enable ssh
-
-# configure DNS
-rm /etc/resolv.conf || true
-echo "nameserver 8.8.8.8" > /etc/resolv.conf
-echo "nameserver 2001:4860:4860::8888" >> /etc/resolv.conf
-echo "nameserver 8.8.4.4" >> /etc/resolv.conf
-echo "nameserver 2001:4860:4860::8844" >> /etc/resolv.conf
-chattr +i /etc/resolv.conf
 
 # generate a version info/build info file
 echo -n "Chromium version: " >> /version-info
