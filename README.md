@@ -39,6 +39,7 @@ Other similar projects:
 - Support for multi-touch touch-screens and gestures
 - Dark mode support
 - Configurable timezone and keyboard layout
+- [Local webserver with PHP support](#local-webserver) (can host simple HTML, landing pages, slideshows, iFrame mechanisms, etc.)
 
 ## Supported platforms
 - Raspberry Pi 3, 4, 5, Zero 2 (W)
@@ -114,6 +115,18 @@ setInterval(function() {
 ```
 
 Whenever the heartbeat stops (for whatever reason), the device will first restart the X11 environment (browser, window manager, etc.) and later (if it hasn't recovered) the whole system by rebooting.
+
+## Local webserver
+AnotterKiosk ships with an nginx webserver and a PHP runtime by default (which is used internally for the heartbeat mechanism).  
+Users can create a folder called `www-public` on the FAT32 partition and put custom HTML or PHP scripts there.  
+Any files placed in the `/boot/firmware/www-public` folder will be available via `http://localhost/www-public/`.  
+Files called `index.php` will be served as the directory index.  
+
+This allows for a number of different mechanisms to be self-hosted, even without any network connectivity at all!
+- Local user interfaces (interaction with GPIOs, sensors, cameras, local storage, etc.)
+- Offline slideshow (folder full of JPEGs)
+- [Small iFrame application to switch between different pages on display](https://gist.github.com/Manawyrm/86f3d4a762fd5138a4ffa7ba4d180d24)
+- Custom digital signage code to download/render online info
 
 ## Inspiration / Other Kiosk-OSes:
 - https://github.com/jareware/chilipie-kiosk/

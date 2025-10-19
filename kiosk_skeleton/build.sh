@@ -73,6 +73,7 @@ ln -sf /tmp/asoundrc /home/pi/.asoundrc
 ln -sf /tmp/localtime /etc/localtime
 ln -sf /tmp/keyboard /etc/default/keyboard
 ln -sf /tmp/resolv.conf /etc/resolv.conf
+ln -sf /boot/firmware/www-public /var/www/html/www-public
 
 systemctl daemon-reload
 
