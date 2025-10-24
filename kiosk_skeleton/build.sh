@@ -24,8 +24,12 @@ apt remove -y rpi-swap systemd-zram-generator || true
 apt remove -y cloud-guest-utils cloud-init || true
 # We really don't want to automount/touch any USB devices
 apt remove -y udisks2 || true
-# Raspbian ships network-manager, we want ifupdown
+# Raspberry Pi OS ships network-manager, we want ifupdown
 apt remove -y network-manager || true
+# Raspberry Pi OS has a special package with some magic Xorg configs
+# to make the vc4 driver behave better with Xorg (modesetting/PrimaryGPU)
+# This package doesn't exist on x86, that's fine. 
+apt install -y gldriver-test || true
 
 # fix file system permissions
 chown -hR 0:0 /etc/sudoers.d/
