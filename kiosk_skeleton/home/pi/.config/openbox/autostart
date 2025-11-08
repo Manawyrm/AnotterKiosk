@@ -14,9 +14,16 @@ fi
 # move the cursor out of the way
 xdotool mousemove 0 0
 
-xset s off # don't activate screensaver
-xset -dpms # disable DPMS (Energy Star) features.
-xset s noblank # don't blank the video device
+# disable blanking or configure user-defined blanking interval
+BLANKING=$(get-ini /boot/firmware/kioskbrowser.ini screen blanking_interval)
+if [ -n "${BLANKING}" ]
+then
+        xset s "${BLANKING}" # blank after n seconds
+else
+        xset s off # don't activate screensaver
+        xset -dpms # disable DPMS (Energy Star) features.
+        xset s noblank # don't blank the video device
+fi
 
 # hide mouse cursor after 1 second
 unclutter -idle 1 -root &

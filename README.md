@@ -40,6 +40,7 @@ Other similar projects:
 - Support for multi-touch touch-screens and gestures
 - Dark mode support
 - Configurable timezone and keyboard layout
+- Optional screen blanking (DPMS) interval for interactive systems
 - [Local webserver with PHP support](#local-webserver) (can host simple HTML, landing pages, slideshows, iFrame mechanisms, etc.)
 
 ## Supported platforms
