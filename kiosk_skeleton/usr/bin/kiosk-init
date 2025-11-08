@@ -7,7 +7,7 @@
 
 mount -t sysfs none /sys
 mount -t proc proc /proc
-mount /dev
+mount -t devtmpfs /dev /dev
 mkdir -p /dev/shm
 mkdir -p /dev/pts
 mount /dev/shm
@@ -16,17 +16,10 @@ mount -o ro /boot/firmware
 mount -a
 
 if [ ! -f /boot/firmware/splash.png ]; then
-        exec /sbin/init
+    exec /sbin/init
 fi
 
-# Try to load Raspberry Pi GPU/DRM drivers now, otherwise the driver load will wipe the splash later.
-/sbin/modprobe -abq drm_dma_helper drm_display_helper drm_kms_helper vc4 drm
-
-# Disable the VT consoles
-echo 0 > /sys/class/vtconsole/vtcon0/bind
-echo 0 > /sys/class/vtconsole/vtcon1/bind
-
-echo | /usr/bin/fbi -d /dev/fb0 --noverbose --nointeractive -T 1 -1 -t 0 -a /boot/firmware/splash.png &> /dev/null
+/usr/bin/kiosk-splash &
 
 # Continue regular boot (aka systemd init)
 exec /sbin/init
