@@ -26,10 +26,6 @@ apt remove -y cloud-guest-utils cloud-init || true
 apt remove -y udisks2 || true
 # Raspberry Pi OS ships network-manager, we want ifupdown
 apt remove -y network-manager || true
-# Raspberry Pi OS has a special package with some magic Xorg configs
-# to make the vc4 driver behave better with Xorg (modesetting/PrimaryGPU)
-# This package doesn't exist on x86, that's fine. 
-apt install -y gldriver-test || true
 
 # fix file system permissions
 chown -hR 0:0 /etc/sudoers.d/
@@ -81,6 +77,8 @@ ln -sf /tmp/keyboard /etc/default/keyboard
 ln -sf /tmp/resolv.conf /etc/resolv.conf
 ln -sf /tmp/cached_UTF-8_del.kmap.gz /etc/console-setup/cached_UTF-8_del.kmap.gz
 ln -sf /boot/firmware/www-public /var/www/html/www-public
+ln -sf /tmp/20-noglamor.conf /usr/share/X11/xorg.conf.d/20-noglamor.conf
+ln -sf /tmp/99-v3d.conf /etc/X11/xorg.conf.d/99-v3d.conf
 
 systemctl daemon-reload
 
@@ -118,6 +116,10 @@ systemctl enable ntpdate
 systemctl enable lightdm
 systemctl enable nginx
 systemctl enable ssh
+
+# Raspberry Pi specific GPU-related services (generate Xorg config)
+systemctl enable glamor-test || true
+systemctl enable rp1-test || true
 
 # generate a version info/build info file
 echo -n "Chromium version: " >> /version-info

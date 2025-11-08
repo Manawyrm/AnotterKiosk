@@ -1,0 +1,11 @@
+[Unit]
+Description=Check for RP1 displays for Xorg
+Before=lightdm.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/systemd/scripts/rp1_test.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
