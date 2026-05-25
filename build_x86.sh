@@ -75,7 +75,8 @@ sudo rm -r "${BUILD_DIR}/kiosk_skeleton"
 cp "${BUILD_DIR}/version-info" version-info
 
 # trim all filesystems
-sudo fstrim -a
+sudo fstrim "${BUILD_DIR}"
+sudo fstrim "${BUILD_DIR}/boot/firmware"
 
 # fill unused space on /boot with 0x00 
 # (FAT32, so zerofree doesn't work, we'll do it manually)

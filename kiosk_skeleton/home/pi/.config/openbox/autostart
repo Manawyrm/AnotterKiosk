@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/sh
+# regardless of which shell is specified in the shebag, this script runs in sh
 
 # display splash screen as Openbox background
 if [ -f /boot/firmware/splash.png ]; then
@@ -32,7 +33,7 @@ unclutter -idle 1 -root &
 AUDIO_DEVICE=$(get-ini /boot/firmware/kioskbrowser.ini audio device)
 if [ -n "${AUDIO_DEVICE}" ]
 then
-	echo "pcm.!default \"${AUDIO_DEVICE}\"" > /tmp/asoundrc
+	echo "pcm.!default \"${AUDIO_DEVICE}\"" > /kiosk-tmp/asoundrc
 fi
 
 # set a custom resolution (if specified)
@@ -59,6 +60,12 @@ if [ -n "${ROTATE_SCREEN}" ]
 then
 	MONITOR=$(xrandr -q | grep " connected" | awk '{ print $1; }')
 	xrandr --output "${MONITOR}" --rotate ${ROTATE_SCREEN}	
+fi
+
+# run screen-setup.sh (if exists)
+SCREEN_SETUP="/boot/firmware/screen-setup.sh"
+if [ -f "${SCREEN_SETUP}" ]; then
+	bash "${SCREEN_SETUP}"
 fi
 
 # enable/disable dark mode
@@ -125,6 +132,41 @@ chromium --start-fullscreen \
 		 ${CHROME_LOW_END_FLAGS} \
 		 ${CHROME_CACHE_FLAGS} \
 		 ${URL} &
+
+for i in $(seq 4)
+do
+	URLN=$(get-ini /boot/firmware/kioskbrowser.ini browser$i url)
+	POSN=$(get-ini /boot/firmware/kioskbrowser.ini browser$i pos)
+	if [ -n "${POSN}" ] && [ -n "${URLN}" ]
+	then
+		chromium --start-fullscreen \
+			--user-data-dir=$(mktemp -d) \
+			--window-position=${POSN} \
+			--allow-insecure-localhost \
+			--autoplay-policy=no-user-gesture-required \
+			--check-for-update-interval=1 \
+			--disable-component-update \
+			--disable-features=Translate \
+			--disable-features=TranslateUI \
+			--disable-infobars \
+			--disable-pinch \
+			--disable-session-crashed-bubble \
+			--disable-smooth-scrolling \
+			--kiosk \
+			--noerrdialogs \
+			--overscroll-history-navigation=0 \
+			--simulate-critical-update \
+			--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
+			--touch-events=enabled \
+			--process-per-site \
+			--no-memcheck \
+			${CHROME_DARK_MODE_FLAGS} \
+			${CHROME_GPU_FLAGS} \
+			${CHROME_LOW_END_FLAGS} \
+			${CHROME_CACHE_FLAGS} \
+			${URLN} &
+	fi
+done
 
 # if a cache clearing interval is specified, launch the cache-clear-timer (while true, sleep, rm -rf)
 CACHE_CLEAR=$(get-ini /boot/firmware/kioskbrowser.ini browser cache_clear_interval)

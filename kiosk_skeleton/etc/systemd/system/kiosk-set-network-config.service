@@ -1,0 +1,10 @@
+[Unit]
+Description=Set network config
+Before=networking.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kiosk-set-network-config
+
+[Install]
+WantedBy=multi-user.target

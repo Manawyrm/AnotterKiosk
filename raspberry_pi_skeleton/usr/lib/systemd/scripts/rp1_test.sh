@@ -14,7 +14,7 @@ if raspi-config nonint is_pifive; then
   fi
 fi
 
-sed -e "s/XXX/${IDENTIFIER}/" << EOF | sed -e "s/YYY/${MATCHDRIVER}/" > /tmp/99-v3d.conf
+sed -e "s/XXX/${IDENTIFIER}/" << EOF | sed -e "s/YYY/${MATCHDRIVER}/" > /kiosk-tmp/99-v3d.conf
 Section "OutputClass"
   Identifier "XXX"
   MatchDriver "YYY"

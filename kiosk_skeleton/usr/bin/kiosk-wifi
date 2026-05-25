@@ -1,13 +1,18 @@
 #!/bin/bash
 
 # configure DNS
-echo "nameserver 8.8.8.8" > /etc/resolv.conf
-echo "nameserver 2001:4860:4860::8888" >> /etc/resolv.conf
-echo "nameserver 8.8.4.4" >> /etc/resolv.conf
-echo "nameserver 2001:4860:4860::8844" >> /etc/resolv.conf
+if [ -f "/boot/firmware/resolv.conf" ]; then
+	cat /boot/firmware/resolv.conf > /kiosk-tmp/resolv.conf
+else
+	echo "nameserver 8.8.8.8" > /kiosk-tmp/resolv.conf
+	echo "nameserver 2001:4860:4860::8888" >> /kiosk-tmp/resolv.conf
+	echo "nameserver 8.8.4.4" >> /kiosk-tmp/resolv.conf
+	echo "nameserver 2001:4860:4860::8844" >> /kiosk-tmp/resolv.conf
+fi
+
 
 if [ -f "/boot/firmware/wpa_supplicant.conf" ]; then
-	ln -s /boot/firmware/wpa_supplicant.conf /tmp/wpa_supplicant.conf
+	ln -s /boot/firmware/wpa_supplicant.conf /kiosk-tmp/wpa_supplicant.conf
 	exit
 fi
 
@@ -17,18 +22,18 @@ WIFI_COUNTRY=$(get-ini /boot/firmware/kioskbrowser.ini wifi country)
 
 if [ -n "${WIFI_SSID}" ]
 then
-	echo "country=${WIFI_COUNTRY}" > /tmp/wpa_supplicant.conf
-	echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" >> /tmp/wpa_supplicant.conf
-	echo "update_config=1" >> /tmp/wpa_supplicant.conf
-	echo "network={" >> /tmp/wpa_supplicant.conf
-	echo "	ssid=\"${WIFI_SSID}\"" >> /tmp/wpa_supplicant.conf
+	echo "country=${WIFI_COUNTRY}" > /kiosk-tmp/wpa_supplicant.conf
+	echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" >> /kiosk-tmp/wpa_supplicant.conf
+	echo "update_config=1" >> /kiosk-tmp/wpa_supplicant.conf
+	echo "network={" >> /kiosk-tmp/wpa_supplicant.conf
+	echo "	ssid=\"${WIFI_SSID}\"" >> /kiosk-tmp/wpa_supplicant.conf
 	if [ -n "${WIFI_PSK}" ]
 	then
-		echo "	psk=\"${WIFI_PSK}\"" >> /tmp/wpa_supplicant.conf
+		echo "	psk=\"${WIFI_PSK}\"" >> /kiosk-tmp/wpa_supplicant.conf
 	else
-		echo "	key_mgmt=NONE" >> /tmp/wpa_supplicant.conf
+		echo "	key_mgmt=NONE" >> /kiosk-tmp/wpa_supplicant.conf
 	fi
-	echo "}" >> /tmp/wpa_supplicant.conf
+	echo "}" >> /kiosk-tmp/wpa_supplicant.conf
 fi
 
 rfkill unblock all || true

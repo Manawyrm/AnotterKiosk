@@ -45,9 +45,11 @@ mkdir -p /var/lib/lightdm
 mkdir -p /var/lib/dhcp
 mkdir -p /var/lib/nginx
 mkdir -p /var/lib/private
+mkdir -p /kiosk-tmp #won't get cleaned up by systemd-tmpfiles
 
 echo "tmpfs		/dev/shm	tmpfs	mode=0777	0	0" >> /etc/fstab
 echo "tmpfs		/tmp		tmpfs	mode=1777	0	0" >> /etc/fstab
+echo "tmpfs		/kiosk-tmp	tmpfs	mode=1777	0	0" >> /etc/fstab
 echo "tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0" >> /etc/fstab
 echo "tmpfs		/var/log	tmpfs		defaults,noatime,nosuid,mode=0755,size=100m    0 0" >> /etc/fstab
 echo "tmpfs		/var/lib/lightdm	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> /etc/fstab
@@ -60,25 +62,27 @@ echo "tmpfs		/home/pi/.pki/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0   
 echo "tmpfs		/home/pi/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/root/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=0,gid=0  0       0" >> /etc/fstab
 
-# Create symlinks for configuration files which will later get created at runtime (in /tmp)
+# Create symlinks for configuration files which will later get created at runtime (in /kiosk-tmp)
 rm /etc/hosts || true
 rm /etc/hostname || true
 rm /etc/localtime || true
 rm /etc/resolv.conf || true
 rm /etc/console-setup/cached_UTF-8_del.kmap.gz || true
+rm /etc/network/interfaces || true
 mkdir -p /etc/wpa_supplicant/
 mkdir -p /etc/console-setup/
-ln -sf /tmp/hosts /etc/hosts
-ln -sf /tmp/hostname /etc/hostname
-ln -sf /tmp/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
-ln -sf /tmp/asoundrc /home/pi/.asoundrc
-ln -sf /tmp/localtime /etc/localtime
-ln -sf /tmp/keyboard /etc/default/keyboard
-ln -sf /tmp/resolv.conf /etc/resolv.conf
-ln -sf /tmp/cached_UTF-8_del.kmap.gz /etc/console-setup/cached_UTF-8_del.kmap.gz
+ln -sf /kiosk-tmp/hosts /etc/hosts
+ln -sf /kiosk-tmp/hostname /etc/hostname
+ln -sf /kiosk-tmp/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+ln -sf /kiosk-tmp/asoundrc /home/pi/.asoundrc
+ln -sf /kiosk-tmp/localtime /etc/localtime
+ln -sf /kiosk-tmp/keyboard /etc/default/keyboard
+ln -sf /kiosk-tmp/resolv.conf /etc/resolv.conf
+ln -sf /kiosk-tmp/cached_UTF-8_del.kmap.gz /etc/console-setup/cached_UTF-8_del.kmap.gz
 ln -sf /boot/firmware/www-public /var/www/html/www-public
-ln -sf /tmp/20-noglamor.conf /usr/share/X11/xorg.conf.d/20-noglamor.conf
-ln -sf /tmp/99-v3d.conf /etc/X11/xorg.conf.d/99-v3d.conf
+ln -sf /kiosk-tmp/20-noglamor.conf /usr/share/X11/xorg.conf.d/20-noglamor.conf
+ln -sf /kiosk-tmp/99-v3d.conf /etc/X11/xorg.conf.d/99-v3d.conf
+ln -sf /kiosk-tmp/network-interfaces /etc/network/interfaces
 
 systemctl daemon-reload
 
@@ -112,6 +116,7 @@ systemctl enable kiosk-autossh
 systemctl enable kiosk-watchdog
 systemctl enable kiosk-set-hostname
 systemctl enable kiosk-locale
+systemctl enable kiosk-set-network-config
 systemctl enable ntpdate
 systemctl enable lightdm
 systemctl enable nginx

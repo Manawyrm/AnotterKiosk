@@ -1,3 +1,12 @@
+#!/bin/bash
+
+NETWORK_CONFIG=/boot/firmware/network-interfaces
+NETWORK_CONFIG_DEST=/kiosk-tmp/network-interfaces
+
+if [ -f "${NETWORK_CONFIG}" ]; then
+	cp "${NETWORK_CONFIG}" "${NETWORK_CONFIG_DEST}"
+else
+	cat >"${NETWORK_CONFIG_DEST}" <<EOF
 source /etc/network/interfaces.d/*
 
 auto lo
@@ -14,3 +23,6 @@ iface wlan0 inet dhcp
 	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 iface wlan0 inet6 auto
+EOF
+
+fi
