@@ -1,0 +1,5 @@
+# Keep the built-in WiFi (wlan0) from being active while a USB WiFi adapter
+# (wlan1) is present. Re-run kiosk-wifi so only the preferred interface stays
+# up (see /usr/bin/kiosk-wifi for the preference logic).
+SUBSYSTEM=="net", ACTION=="add",    KERNEL=="wlan1", RUN+="/usr/bin/systemctl --no-block restart kiosk-wifi.service"
+SUBSYSTEM=="net", ACTION=="remove", KERNEL=="wlan1", RUN+="/usr/bin/systemctl --no-block restart kiosk-wifi.service"

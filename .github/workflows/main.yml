@@ -53,9 +53,9 @@ jobs:
           sudo apt update -qq
           sudo apt install -yqq libguestfs-tools qemu-utils qemu-system-arm qemu-efi-aarch64 qemu-block-extra qemu-user-static binfmt-support rsync sudo wget xz-utils pigz mount dosfstools libarchive-tools zerofree util-linux e2fsprogs
           
-      - name: Build armhf (Raspberry Pi 1/2/Zero) firmware
-        run: |
-          ./build_raspberry_pi.sh "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2025-10-02/2025-10-01-raspios-trixie-armhf-lite.img.xz" "22a02428e7de5345ccf865fa3e2fe06f3aa56afdde98bc23d9d91e83320b3511" "armhf-raspberrypi"
+      # - name: Build armhf (Raspberry Pi 1/2/Zero) firmware
+      #   run: |
+      #     ./build_raspberry_pi.sh "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2025-10-02/2025-10-01-raspios-trixie-armhf-lite.img.xz" "22a02428e7de5345ccf865fa3e2fe06f3aa56afdde98bc23d9d91e83320b3511" "armhf-raspberrypi"
 
       - name: Build arm64 (Raspberry Pi Zero 2/3/4/5+) firmware
         run: |

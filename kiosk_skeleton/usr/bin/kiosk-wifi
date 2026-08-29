@@ -32,4 +32,30 @@ then
 fi
 
 rfkill unblock all || true
-iw wlan0 set power_save off || true
+
+# Determine the wireless interface to use. The "interface" option in
+# kioskbrowser.ini wins; otherwise the USB WiFi adapter (wlan1) is preferred
+# over the built-in WiFi (wlan0).
+PREFERRED=$(get-ini /boot/firmware/kioskbrowser.ini wifi interface)
+if [ -n "${PREFERRED}" ] && [ ! -d "/sys/class/net/${PREFERRED}" ]; then
+	PREFERRED=
+fi
+if [ -z "${PREFERRED}" ]; then
+	if [ -d /sys/class/net/wlan1 ]; then
+		PREFERRED=wlan1
+	else
+		PREFERRED=wlan0
+	fi
+fi
+
+# Only one wireless interface should be active at a time. Bring the preferred
+# one up (if it isn't already) and take every other wireless interface down.
+ifup "${PREFERRED}" 2>/dev/null || true
+for WLAN in wlan0 wlan1; do
+	if [ "${WLAN}" != "${PREFERRED}" ] && [ -d "/sys/class/net/${WLAN}" ]; then
+		ip link set "${WLAN}" down 2>/dev/null || true
+	fi
+done
+
+# Disable Wi-Fi power management on the active interface
+iw "${PREFERRED}" set power_save off 2>/dev/null || true

@@ -8,9 +8,17 @@ allow-hotplug eth0
 iface eth0 inet dhcp
 iface eth0 inet6 auto
 
-auto wlan0
-allow-hotplug wlan0
+# Built-in WiFi (fallback). Deliberately no "auto"/"allow-hotplug" here:
+# it is only brought up by /usr/bin/kiosk-wifi when no USB WiFi (wlan1) is present.
 iface wlan0 inet dhcp
 	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 iface wlan0 inet6 auto
+
+# USB WiFi (preferred)
+auto wlan1
+allow-hotplug wlan1
+iface wlan1 inet dhcp
+	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+iface wlan1 inet6 auto
