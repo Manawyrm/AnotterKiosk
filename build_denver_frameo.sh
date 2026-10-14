@@ -75,18 +75,17 @@ sudo mount proc -t proc -o nosuid,noexec,nodev "${BUILD_DIR}/proc/"
 sudo mount sys -t sysfs -o nosuid,noexec,nodev,ro "${BUILD_DIR}/sys/"
 sudo mount devpts -t devtmpfs -o mode=0755,nosuid "${BUILD_DIR}/dev/"
 
-# and then actually install everything.
-sudo chroot "${BUILD_DIR}" /setup.sh
-sudo chroot "${BUILD_DIR}" /kiosk_skeleton/build.sh
-
 # HACK:
 # Chromium 146 removes support for OpenGL ES 2.0, which is the highest the RK3128 supports.
 # Downgrade Chromium to 145 to still have GPU accelleration:
-wget -P "${BUILD_DIR}" "https://snapshot.debian.org/archive/debian-security/20260306T064009Z/pool/updates/main/c/chromium/chromium_145.0.7632.159-1~deb13u1_armhf.deb"
-wget -P "${BUILD_DIR}" "https://snapshot.debian.org/archive/debian-security/20260306T064009Z/pool/updates/main/c/chromium/chromium-common_145.0.7632.159-1~deb13u1_armhf.deb"
-wget -P "${BUILD_DIR}" "https://snapshot.debian.org/archive/debian-security/20260306T064009Z/pool/updates/main/c/chromium/chromium-sandbox_145.0.7632.159-1~deb13u1_armhf.deb"
+sudo wget -P "${BUILD_DIR}" "https://snapshot.debian.org/archive/debian-security/20260306T064009Z/pool/updates/main/c/chromium/chromium_145.0.7632.159-1~deb13u1_armhf.deb"
+sudo wget -P "${BUILD_DIR}" "https://snapshot.debian.org/archive/debian-security/20260306T064009Z/pool/updates/main/c/chromium/chromium-common_145.0.7632.159-1~deb13u1_armhf.deb"
+sudo wget -P "${BUILD_DIR}" "https://snapshot.debian.org/archive/debian-security/20260306T064009Z/pool/updates/main/c/chromium/chromium-sandbox_145.0.7632.159-1~deb13u1_armhf.deb"
 sha256sum -c "${BUILD_DIR}/chromium145.sha256"
 
+# and then actually install everything.
+sudo chroot "${BUILD_DIR}" /setup.sh
+sudo chroot "${BUILD_DIR}" /kiosk_skeleton/build.sh
 sudo chroot "${BUILD_DIR}" /setup_post.sh
 
 sudo rm -r "${BUILD_DIR}/kiosk_skeleton"
