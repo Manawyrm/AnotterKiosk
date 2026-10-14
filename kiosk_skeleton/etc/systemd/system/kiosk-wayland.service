@@ -1,0 +1,17 @@
+[Unit]
+Description=Chromium kiosk in cage
+# PAM logins are only allowed after systemd-user-sessions
+After=systemd-user-sessions.service seatd.service network-online.target
+Wants=seatd.service network-online.target
+
+[Service]
+User=pi
+# Own logind session: creates /run/user/1000 and sets XDG_RUNTIME_DIR
+PAMName=login
+Environment=LIBSEAT_BACKEND=seatd
+ExecStart=/usr/bin/cage -d -- /home/pi/.config/openbox/autostart_wayland
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

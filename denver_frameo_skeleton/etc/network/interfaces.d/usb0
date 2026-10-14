@@ -1,0 +1,6 @@
+allow-hotplug usb0
+iface usb0 inet static
+	address 169.254.23.42/16
+	metric 5000
+
+iface usb0 inet6 auto

@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# set a custom audio output device (if specified)
+AUDIO_DEVICE=$(get-ini /boot/firmware/kioskbrowser.ini audio device)
+if [ -n "${AUDIO_DEVICE}" ]
+then
+	echo "pcm.!default \"${AUDIO_DEVICE}\"" > /tmp/asoundrc
+fi
+
+# set a screen rotation (if specified)
+#ROTATE_SCREEN=$(get-ini /boot/firmware/kioskbrowser.ini screen rotate_screen)
+#if [ -n "${ROTATE_SCREEN}" ]
+#then
+#	MONITOR=$(wlr-randr -q | grep " connected" | awk '{ print $1; }')
+#	wlr-randr --output "${MONITOR}" --rotate ${ROTATE_SCREEN}
+#fi
+wlr-randr --output DSI-1 --transform 270
+
+# enable/disable dark mode
+DARK_MODE=$(get-ini /boot/firmware/kioskbrowser.ini browser darkmode)
+if [ "${DARK_MODE}" -eq 1 ]
+then
+    export GTK_THEME=Adwaita-dark
+    CHROME_DARK_MODE_FLAGS="--enable-features=WebContentsForceDark:inversion_method/cielab_based/image_behavior/none"
+else
+	export GTK_THEME=Adwaita
+	CHROME_DARK_MODE_FLAGS=""
+fi
+
+# enable/disable hardware acceleration
+HW_ACCEL=$(get-ini /boot/firmware/kioskbrowser.ini browser hardware_accel)
+if [ "${HW_ACCEL}" -eq 1 ]
+then
+    CHROME_GPU_FLAGS=""
+else
+    CHROME_GPU_FLAGS="--disable-gpu"
+fi
+
+# enable/disable low_end_device_mode
+LOW_END=$(get-ini /boot/firmware/kioskbrowser.ini browser low_end_device_mode)
+if [ "${LOW_END}" -eq 1 ]
+then
+    CHROME_LOW_END_FLAGS="--enable-low-end-device-mode --disable-composited-antialiasing --disable-low-res-tiling"
+else
+    CHROME_LOW_END_FLAGS="--disable-low-end-device-mode"
+fi
+
+# enable/disable "disk" caching (ram disk in our case)
+DISABLE_CACHE=$(get-ini /boot/firmware/kioskbrowser.ini browser disable_cache)
+if [ "${DISABLE_CACHE}" -eq 1 ]
+then
+    CHROME_CACHE_FLAGS="--disk-cache-dir=/dev/null"
+else
+    CHROME_CACHE_FLAGS=""
+fi
+
+# start chromium
+URL=$(get-ini /boot/firmware/kioskbrowser.ini browser url)
+
+while :
+do
+chromium --start-fullscreen \
+		 --allow-insecure-localhost \
+		 --autoplay-policy=no-user-gesture-required \
+		 --check-for-update-interval=1 \
+		 --disable-component-update \
+		 --disable-features=Translate,TranslateUI \
+		 --disable-infobars \
+		 --disable-pinch \
+		 --disable-session-crashed-bubble \
+		 --disable-smooth-scrolling \
+		 --kiosk \
+		 --noerrdialogs \
+		 --overscroll-history-navigation=0 \
+		 --simulate-critical-update \
+		 --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
+		 --touch-events=enabled \
+		 --process-per-site \
+		 --no-memcheck \
+		 --ozone-platform=x11 \
+		 --ignore-gpu-blocklist --enable-zero-copy --single-process --disable-gpu-sandbox --no-sandbox \
+		 ${CHROME_DARK_MODE_FLAGS} \
+		 ${CHROME_GPU_FLAGS} \
+		 ${CHROME_LOW_END_FLAGS} \
+		 ${CHROME_CACHE_FLAGS} \
+		 ${URL}
+done
+
+# if a cache clearing interval is specified, launch the cache-clear-timer (while true, sleep, rm -rf)
+CACHE_CLEAR=$(get-ini /boot/firmware/kioskbrowser.ini browser cache_clear_interval)
+if [ -n "${CACHE_CLEAR}" ]
+then
+	/usr/bin/cache-clear-timer "${CACHE_CLEAR}" &
+fi

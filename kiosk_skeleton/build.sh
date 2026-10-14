@@ -41,6 +41,9 @@ mkdir -p /home/pi/.ssh
 chown -hR 1000:1000 /home/pi/.ssh
 mkdir -p /root/.ssh
 
+mkdir -p /home/pi/.local/share/pki/nssdb
+chown -hR 1000:1000 /home/pi/.local
+
 mkdir -p /var/lib/lightdm
 mkdir -p /var/lib/dhcp
 mkdir -p /var/lib/nginx
@@ -57,6 +60,7 @@ echo "tmpfs		/var/lib/private	tmpfs	defaults,noatime,nosuid,size=30m    0 0" >> 
 echo "tmpfs		/home/pi/.cache tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.config/chromium/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.pki/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
+echo "tmpfs             /home/pi/.local/ tmpfs mode=0755,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/home/pi/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=1000,gid=1000  0       0" >> /etc/fstab
 echo "tmpfs		/root/.ssh/ tmpfs mode=0700,nosuid,nodev,uid=0,gid=0  0       0" >> /etc/fstab
 
