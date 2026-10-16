@@ -89,11 +89,11 @@ jobs:
 
       - name: Build Denver Frameo SD card firmware
         run: |
-          ./build_denver_frameo.sh "https://github.com/Manawyrm/denver-frameo-rk3126-debian/releases/download/v0.0.5/denver-frameo-rk3126-debian-v0.0.5-sdcard.img.xz" "8f68624994c646324da0c2cad10d4268d0e0ca0e2e2d1144ca2c27da2badc069" "armhf-denver-frameo-sdcard"
+          ./build_denver_frameo.sh "https://github.com/Manawyrm/denver-frameo-rk3126-debian/releases/download/v0.0.7/denver-frameo-rk3126-debian-v0.0.7-sdcard.img.xz" "2a6e6c9a71c94b476c598270112b3d7b85e95cb5669321e39dfae698b11f9d1d" "armhf-denver-frameo-sdcard"
 
       - name: Build arm64 (Raspberry Pi Zero 2/3/4/5+) firmware
         run: |
-          ./build_denver_frameo.sh "https://github.com/Manawyrm/denver-frameo-rk3126-debian/releases/download/v0.0.5/denver-frameo-rk3126-debian-v0.0.5-emmc.img.xz" "44871040a6c77fc6a58736e491cc5e2ec846f197fb76f96e1c316d85c8d58c9e" "armhf-denver-frameo-emmc"
+          ./build_denver_frameo.sh "https://github.com/Manawyrm/denver-frameo-rk3126-debian/releases/download/v0.0.7/denver-frameo-rk3126-debian-v0.0.7-emmc.img.xz" "e86acbd8e50d8c6910f66294038cf93142d390de4d4c5ae8543f7b258830d2a0" "armhf-denver-frameo-emmc"
 
       - name: Release build artifacts
         uses: softprops/action-gh-release@v1
