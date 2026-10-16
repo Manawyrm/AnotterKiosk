@@ -64,7 +64,7 @@ chromium --start-fullscreen \
 		 --autoplay-policy=no-user-gesture-required \
 		 --check-for-update-interval=1 \
 		 --disable-component-update \
-		 --disable-features=Translate,TranslateUI \
+		 --disable-features=Translate,TranslateUI,AllowANGLEPassthroughShaders \
 		 --disable-infobars \
 		 --disable-pinch \
 		 --disable-session-crashed-bubble \
@@ -77,8 +77,8 @@ chromium --start-fullscreen \
 		 --touch-events=enabled \
 		 --process-per-site \
 		 --no-memcheck \
-		 --ozone-platform=x11 \
-		 --ignore-gpu-blocklist --enable-zero-copy --single-process --disable-gpu-sandbox --no-sandbox \
+		 --ozone-platform=wayland \
+		 --ignore-gpu-blocklist --enable-zero-copy --disable-gpu-sandbox --no-sandbox \
 		 ${CHROME_DARK_MODE_FLAGS} \
 		 ${CHROME_GPU_FLAGS} \
 		 ${CHROME_LOW_END_FLAGS} \
