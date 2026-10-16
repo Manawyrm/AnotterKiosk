@@ -89,7 +89,7 @@ jobs:
 
       - name: Build Denver Frameo SD card firmware
         run: |
-          ./build_denver_frameo.sh "https://github.com/Manawyrm/denver-frameo-rk3126-debian/releases/download/v0.0.10/denver-frameo-rk3126-debian-v0.0.10-sdcard.img.xz" "fc5351d454b249926e115cf1b0dff96f215673da6269629dfcd24597bf988cd8" "armhf-denver-frameo-sdcard"
+          ./build_denver_frameo.sh "https://github.com/Manawyrm/denver-frameo-rk3126-debian/releases/download/v0.0.10/denver-frameo-rk3126-debian-v0.0.10-sdcard.img.xz" "7f17a6e36de4e181e5395483cf6122d522e46d837f72fb566f94f91b902a5a50" "armhf-denver-frameo-sdcard"
 
       - name: Build arm64 (Raspberry Pi Zero 2/3/4/5+) firmware
         run: |
