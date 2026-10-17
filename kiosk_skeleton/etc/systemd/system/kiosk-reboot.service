@@ -1,0 +1,10 @@
+[Unit]
+Description=Reboots the computer every day
+After=lightdm.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/kiosk-reboot
+
+[Install]
+WantedBy=multi-user.target

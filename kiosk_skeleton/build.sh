@@ -114,6 +114,7 @@ systemctl enable kiosk-ssh-keys
 systemctl enable kiosk-wifi
 systemctl enable kiosk-autossh
 systemctl enable kiosk-watchdog
+systemctl enable kiosk-reboot
 systemctl enable kiosk-set-hostname
 systemctl enable kiosk-locale
 systemctl enable ntpdate

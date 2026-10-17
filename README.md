@@ -70,7 +70,6 @@ Other similar projects:
 ## Planned features:
 - Raspberry Pi PXE/network boot support
 - Network connectivity watchdog (configurable ping, etc. timeout)
-- Automatic reboot at specified time
 
 ## Security considerations:
 - Autossh does not check SSH host keys. This is okay-ish as long as the target server only allows tunneling, nothing else.

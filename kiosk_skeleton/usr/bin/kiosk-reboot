@@ -1,0 +1,20 @@
+#!/bin/bash
+
+SCHEDULED_TIME=$(get-ini /boot/firmware/kioskbrowser.ini reboot scheduled_time)
+
+if [ -z "${SCHEDULED_TIME}" ]; then
+    exit 0
+fi
+
+TARGET_UNIXTIME=$(date -d "$SCHEDULED_TIME" +%s)
+NOW_UNIXTIME=$(date +%s)
+
+SLEEP=$(($TARGET_UNIXTIME - $NOW_UNIXTIME))
+
+if [ $SLEEP -lt 0 ]
+then
+    SLEEP=$((86400 + SLEEP))
+fi
+
+sleep $SLEEP
+/sbin/reboot
