@@ -2,7 +2,7 @@
 Description=Force ntpdate to synchronise clock
 Requires=networking.service
 After=syslog.target networking.service dhcpcd.service
-Before=lightdm.service
+Before=lightdm.service kiosk-wayland.service
 
 StartLimitIntervalSec=2
 StartLimitBurst=100
